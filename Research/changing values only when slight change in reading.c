@@ -354,101 +354,78 @@ void timer4_init(void)
 
 int	 store[4][10]; 
 
-void store_init()
-{
- for (int  i = 0 ; i < 10 ; i++)
-		{
-          for (int j = 0; i<4;j++)
-		  {
- 		   store[j][i]= 999;
-		  }
-        }
-}
 int count = 0;
 //This ISR can be used to schedule events like refreshing ADC data, LCD data
 ISR(TIMER4_OVF_vect)
 {
 	cli();
+ lcd_print(1, 1, count, 3);
  TCNT4H = 0x1F; //reload counter high value
  TCNT4L = 0x01; //reload counter low value
  if (read == 1)
  {
-  if (count ==0)
+  sensor_data_interpretation();
+  if(count == 0)
+  {  
+   for(int i = 0; i <4; i++)
+   {
+    if(i == 0 )
+    {
+     sensor_data_interpretation();
+     lcd_print(1, 10, converttomm_41sk(SHARP_1), 3);
+     store[i][count]= converttomm_41sk(SHARP_1);
+    }
+    if(i == 1 )
+    {
+     sensor_data_interpretation();
+     lcd_print(1, 10, Center_white_line, 3);
+     store[i][count]=(int) Center_white_line;
+    }
+    if(i == 2 )
+    {
+	 sensor_data_interpretation();
+     lcd_print(1, 10, Left_white_line, 3);
+     store[i][count]=(int) Left_white_line;
+    }
+    if(i == 3 )
+    {
+     sensor_data_interpretation();
+     lcd_print(1, 10, Right_white_line, 3);
+     store[i][count]=(int) Right_white_line;
+    }
+   }
+  }
+  if (count >0)
   {
-   for (int x=0; x<4;x++ )
+   for(int i = 0; i <4; i++)
    {
-    if (x == 0)
-    { 
-     lcd_print(1, 1, count, 3);
-     sensor_data_interpretation();
+    if(i == 0 && ( (store[i][count-1]+5)<converttomm_41sk(SHARP_1) || (store[i][count-1]-5)>converttomm_41sk(SHARP_1) ))
+    {
+	 sensor_data_interpretation();
      lcd_print(1, 10, converttomm_41sk(SHARP_1), 3);
-     store[0][count]=converttomm_41sk(SHARP_1);
-     count++;
+     store[i][count]= converttomm_41sk(SHARP_1);
     }
-    else if (x == 1)
+    if(i == 1 && ( (store[i][count-1]+5)<(Center_white_line-5) || (store[i][count-1]-5)>Center_white_line ))
     {
-     lcd_print(1, 1, count, 3);
      sensor_data_interpretation();
-     lcd_print(1, 10,Left_white_line , 3);
-     store[1][count]=Left_white_line;
-     count++;
+     lcd_print(1, 10, Center_white_line, 3);
+     store[i][count]=(int) Center_white_line;
     }
-    else if (x == 2)
+    if(i == 2 && ((store[i][count-1]+5)<(Left_white_line-5) || (store[i][count-1]-5)>Left_white_line))
     {
-     lcd_print(1, 1, count, 3);
      sensor_data_interpretation();
-     lcd_print(1, 10,Center_white_line , 3);
-     store[2][count]=Center_white_line;
-     count++;
+     lcd_print(1, 10, Left_white_line, 3);
+     store[i][count]=(int) Left_white_line;
     }
-    else if (x == 3)
+    if(i == 3 && ((store[i][count-1]+5)<(Right_white_line-5) || (store[i][count-1]-5)>Right_white_line))
     {
-     lcd_print(1, 1, count, 3);
      sensor_data_interpretation();
-     lcd_print(1, 10,Right_white_line, 3);
-     store[3][count]=Right_white_line;
-     count++;
+     lcd_print(1, 10, Right_white_line, 3);
+     store[i][count]=(int) Right_white_line;
     }
    }
   }
-  else
-  { 
-   for (int x=0; x<4;x++ )
-   {
-    if (x == 0 && store[0][count-1]<(converttomm_41sk(SHARP_1)-5) && store[0][count-1]>(converttomm_41sk(SHARP_1)-5) )
-    { 
-     lcd_print(1, 1, count, 3);
-     sensor_data_interpretation();
-     lcd_print(1, 10, converttomm_41sk(SHARP_1), 3);
-     store[0][count]=converttomm_41sk(SHARP_1);
-     count++;
-    }
-    else if (x == 1 && store[0][count-1]<(Left_white_line-5) && store[0][count-1]>(Left_white_line-5))
-    {
-     lcd_print(1, 1, count, 3);
-     sensor_data_interpretation();
-     lcd_print(1, 10,Left_white_line , 3);
-     store[1][count]=Left_white_line;
-     count++;
-    }
-    else if (x == 2 && store[0][count-1]<(Center_white_line-5) && store[0][count-1]>(Center_white_line-5))
-    {
-     lcd_print(1, 1, count, 3);
-     sensor_data_interpretation();
-     lcd_print(1, 10,Center_white_line , 3);
-     store[2][count]=Center_white_line;
-     count++;
-    }
-    else if (x == 3  && store[0][count-1]<(Right_white_line-5) && store[0][count-1]>(Right_white_line-5))
-    {
-     lcd_print(1, 1, count, 3);
-     sensor_data_interpretation();
-     lcd_print(1, 10,Right_white_line, 3);
-     store[3][count]=Right_white_line;
-     count++;
-    }
-   }
-  }
+  count++;
  }   
  sei();
 } 
@@ -496,14 +473,15 @@ SIGNAL(SIG_USART2_RECV) 		// ISR for receive complete interrupt
 		  lcd_init();
 
 
-		for (int  i = 0 ; i < count ; i++)
+		for (int i = 0 ; i < count ; i++)
 		{
-          for (int j = 0; i<4;j++)
-		  {
-		   lcd_print(2, 10, store[j][i], 3);
- 		   _delay_ms(1000);	
- 		   send(store[j][i]);
-		  }
+         for (int j = 0 ; j < 4 ; j++)
+		 {
+		  lcd_print(2, 10, store[j][i], 3);
+          lcd_print(2, 14, i, 3);
+			_delay_ms(1000);			
+ 		  send(store[j][i]);
+		 }
         }
 	}
 
@@ -511,6 +489,17 @@ sei();
 
 }
 
+void store_init()
+{
+  
+		for (int i = 0 ; i < 10 ; i++)
+		{
+         for (int j = 0 ; j < 4 ; j++)
+		 {			
+ 		  store[j][i]=999;
+		 }
+        }
+}
 
 
 //Function used for moving robot forward by specified distance
@@ -604,8 +593,8 @@ void init_devices()
  right_position_encoder_interrupt_init();
  timer4_init();
  adc_init();
- uart2_init();
  store_init();
+ uart2_init();
  TIMSK4 = 0x01;
  sei();   // Enables the global interrupt 
 }
