@@ -1,3 +1,4 @@
+
 #define __OPTIMIZE__ -O0
 #define F_CPU 14745600
 #include <avr/io.h>
@@ -6,17 +7,12 @@
 #include <math.h>
 #include <stdlib.h>
 #include "lcd.h"
-
-
 unsigned char sp1;
-
-//unsigned char dt;
 char a[3];
 unsigned char flag = 0;
 unsigned char data;
 unsigned char ADC_flag;
 unsigned char conv_adc(unsigned char);
-//unsigned char ADC_Value;
 unsigned char lwl = 0;
 unsigned char cwl = 0;
 unsigned char rwl = 0;
@@ -32,7 +28,6 @@ unsigned char ADC_Value;
 unsigned char Left_white_line = 0;
 unsigned char Center_white_line = 0;
 unsigned char Right_white_line = 0;
-
 
 void adcpinconfig (void)
 {
@@ -50,7 +45,7 @@ void adcinit(void)
 	ADCSRB = 0x00;		//MUX5 = 0
 	ADMUX = 0x20;		//Vref=5V external --- ADLAR=1 --- MUX4:0 = 0000
 	ACSR = 0x80;
-	ADCSRA = 0x86;		//ADEN=1 --- ADIE=1 --- ADPS2:0 = 1 1 0
+	ADCSRA = 0x86;		//ADEN=1 --- ADIE=0 --- ADPS2:0 = 1 1 0
 }
 unsigned char conv_adc(unsigned char ch)
 {
@@ -60,9 +55,8 @@ unsigned char conv_adc(unsigned char ch)
 		ADCSRB = 0x08;
 	}
 	ch = ch & 0x07;			  //Store only 3 LSB bits
-	ADMUX= 0x20 | ch;			  //Select the ADC channel with left adjust select
-	//ADC_flag = 0x00; 			  //Clear the user defined flag
-	ADCSRA = ADCSRA | 0x40;	  //Set start conversion bit
+	ADMUX= 0x20 | ch;		 //Select the ADC channel with left adjust select
+	ADCSRA = ADCSRA | 0x40;	          //Set start conversion bit
 	while((ADCSRA&0x10)==0);	  //Wait for ADC conversion to complete
 	a=ADCH;
 	ADCSRA = ADCSRA|0x10;        //clear ADIF (ADC Interrupt Flag) by writing 1 to it
@@ -102,20 +96,19 @@ unsigned int converttomm_41sk(unsigned int a)
 void timer4_init(void)
 {
 	TCCR4B = 0x00; //stop
-	// TCNT4H = 0x1F; //Counter higher 8 bit value
-	//TCNT4L = 0x01; //Counter lower 8 bit value
 	OCR4AH = 0x00; //Output Compare Register (OCR)- Not used
 	OCR4AL = 0x00; //Output compare Register (OCR)- Not used
 	OCR4BH = 0x00; //Output compare Register (OCR)- Not used
 	OCR4BL = 0x00; //Output compare Register (OCR)- Not used
 	OCR4CH = 0x00; //Output compare Register (OCR)- Not used
 	OCR4CL = 0x00; //Output compare Register (OCR)- Not used
-	ICR4H  = 0x70; //Input Capture Register (ICR)- Not used
-	ICR4L  = 0x80; //Input Capture Register (ICR)- Not used
+	ICR4H  = 0x70; //Input Capture Register (ICR)
+	ICR4L  = 0x80; //Input Capture Register (ICR)
 	TCCR4C = 0x00;
 	TCCR4A = 0b00000010;
 	TCCR4B = 0b00011100; //start Timer
 }
+//conversion of integer into character for serial transmission
 void send ( int n)
 {
 	int z = 0;
@@ -156,12 +149,9 @@ int count = 0;
 ISR(TIMER4_OVF_vect)
 {
 	cli();
-	//lcd_print(2, 1, count, 3);
-	//TCNT4H = 0x1F; //reload counter high value
-	//TCNT4L = 0x01; //reload counter low value
-
+	
 		sp1 = ADC_Conversion(9);
-		lwl= ADC_Conversion(3);	//Getting data of Left WL Sensor
+		lwl= ADC_Conversion(3);	        //Getting data of Left WL Sensor
 		cwl = ADC_Conversion(2);	//Getting data of Center WL Sensor
 		rwl = ADC_Conversion(1);	//Getting data of Right WL Sensor
 
@@ -359,7 +349,7 @@ int main()
 		flag=0;
 
 		lcd_print(1,1,Left_white_line,3);	//Prints value of White Line Sensor1
-	    lcd_print(1,5,Center_white_line,3);	//Prints Value of White Line Sensor2
+	        lcd_print(1,5,Center_white_line,3);	//Prints Value of White Line Sensor2
 		lcd_print(1,9,Right_white_line,3);	//Prints Value of White Line Sensor3
 		
 		
