@@ -1,4 +1,5 @@
 
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 import gnu.io.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,6 +9,7 @@ import java.util.TooManyListenersException;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import java.security.KeyStore;
 
 
 /*
@@ -30,6 +32,11 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
     SerialPort serialPort;
     Thread readThread;
     String ans = "";
+    KeyGenerator keygenerator;
+    SecretKey myDesKey;
+    java.io.FileInputStream fis = null;
+    java.io.FileOutputStream fos = null;
+    KeyStore ks;
 
     public test() {
         initComponents();
@@ -52,6 +59,7 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         jLabel1 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -95,6 +103,13 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
             }
         });
 
+        jButton5.setText("Decrypt");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -109,16 +124,14 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(79, 79, 79)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-                        .addComponent(jButton2)
-                        .addGap(23, 23, 23))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4)
-                        .addGap(35, 35, 35))))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
+                .addGap(23, 23, 23))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1)
@@ -129,18 +142,24 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4))
-                .addGap(18, 18, 18)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(28, 28, 28))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton5)
+                        .addGap(18, 18, 18)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
+                .addGap(31, 31, 31))
         );
 
         pack();
@@ -193,24 +212,48 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         // TODO add your handling code here:
         String s = "";
         BufferedWriter writer = null;
-        try{
-            KeyGenerator keygenerator = KeyGenerator.getInstance("DES");
-            SecretKey myDesKey = keygenerator.generateKey();
+        try {
+            keygenerator = KeyGenerator.getInstance("AES");
+            ks = KeyStore.getInstance("JCEKS");
+            myDesKey = keygenerator.generateKey();
+
+            String password = "EYSIP2016";
+            char[] xy = password.toCharArray();
+            try {
+                fis = new java.io.FileInputStream("keyStoreName.jceks");
+                ks.load(fis, xy);
+            } finally {
+                if (fis != null) {
+                    fis.close();
+                }
+            }
+            KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(xy);
+            KeyStore.SecretKeyEntry skEntry = new KeyStore.SecretKeyEntry(myDesKey);
+            ks.setEntry("secretKeyAlias", skEntry, protParam);
+            try {
+                fos = new java.io.FileOutputStream("keyStoreName.jceks");
+                ks.store(fos, xy);
+                String stringKey = myDesKey.toString();
+                System.out.println("Stored Key: " + stringKey);
+            } finally {
+                if (fos != null) {
+                    fos.close();
+                }
+            }
 
             Cipher desCipher;
-            desCipher = Cipher.getInstance("DES");
-            
+            desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+
             byte[] ansen = ans.getBytes("UTF8");
-            
+
             desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
             byte[] textEncrypted = desCipher.doFinal(ansen);
-            
+
             s = new String(textEncrypted);
-            }catch(Exception e)
-        {
-            System.out.println("Exception");
+        } catch (Exception e) {
+            System.out.println("Exception" + e.toString());
         }
-          
+
         try {
             writer = new BufferedWriter(new FileWriter("output.txt"));
             writer.write(s);
@@ -226,6 +269,71 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         }
 
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        String password = "EYSIP2016";
+        BufferedWriter writer = null;
+        char[] xy = password.toCharArray();
+        KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(xy);
+        try {
+
+            try {
+                fis = new java.io.FileInputStream("keyStoreName.jceks");
+                ks.load(fis, xy);
+            } finally {
+                if (fis != null) {
+                    fis.close();
+                }
+
+            }
+            KeyStore.SecretKeyEntry skEntry = (KeyStore.SecretKeyEntry) ks.getEntry("secretKeyAlias", protParam);
+            myDesKey = skEntry.getSecretKey();
+            String stringKey = myDesKey.toString();
+            System.out.println("Stored Key: " + stringKey);
+
+            Cipher desCipher;
+            desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+
+            BufferedReader br = new BufferedReader(new FileReader("output.txt"));
+            try {
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+
+                while (line != null) {
+                    sb.append(line);
+                    sb.append(System.lineSeparator());
+                    line = br.readLine();
+                }
+                ans = sb.toString();
+            desCipher.init(Cipher.DECRYPT_MODE, myDesKey);
+            byte[] ansen = ans.getBytes("UTF8");
+            byte[] textDecrypted = desCipher.doFinal(ansen);
+            String s = new String(textDecrypted);
+            
+            try {
+            writer = new BufferedWriter(new FileWriter("output.txt"));
+            writer.write(s);
+
+        } catch (IOException e) {
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (IOException e) {
+            }
+        }
+            
+            
+            } finally {
+                br.close();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Exception" + e.toString());
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -361,6 +469,7 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
