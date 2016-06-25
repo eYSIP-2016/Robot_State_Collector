@@ -1,0 +1,118 @@
+
+\documentclass[10pt, a4paper]{beamer}
+\usetheme{Berkeley}
+\usecolortheme{sidebartab}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\begin{document}
+	\setbeamertemplate{sidebar left}{}
+	\title{Progress Presentation-I}
+	\subtitle{e-Yantra Summer Intership-2016 \\ Robot State Collector}
+	\author{Amit Raushan\\Amanpreet Singh\\
+	 Mentor:\\ Shubham Gupta}
+	\institute{IIT Bombay}
+	\date{\today}
+	%\addtobeamertemplate{sidebar left}{}{\includegraphics[scale = 0.3]{logowithtext.png}}
+	\frame{\titlepage}
+
+\setbeamertemplate{sidebar left}[sidebar theme]
+\section{Overview of Project}
+\begin{frame}{Overview of Project}
+\begin{flushleft}
+	{\Large \bf Robot State Collector}\\
+	\begin{itemize}
+		\item Objective
+       \begin{enumerate}
+                  \item  To collect timed data of  the state(like sensor values,velocity etc,) of firebird V robot during its traversal along any given path.
+                      \item Implementation of a code which can accurately transfer the data through xbee module.
+                          \item Development of a GUI that picks up the data from the robot through xbee module,encrypts it and sends it to e-Yantra servers.
+\end{enumerate}
+\item Deliverables
+\begin{enumerate}
+\item Design of such a state collection mechanism which does not affect user's program performance.
+\item GUI for extracting information from the robot.
+\item Documentation of the state collection and encryption process.
+\end{enumerate}
+\end{itemize}
+\end{flushleft}
+\end{frame}
+
+\section{Overview of Task}
+\begin{frame}{Overview of Task}
+\begin{flushleft}
+%\vspace{0.35in}
+ {\Large \bf Task Lists}\\
+ \vspace{0.1in}
+\begin{tabular}{|c|c|}
+\hline
+Task & \hspace{0.1in}Deadline\hspace{0.1in} \\
+\hline
+Study and set up Linux and understand problem  & 3 days\\
+statement &     \\
+\hline
+Relevant Reading and Getting started &  4 days\\
+\hline
+Interrupt based state collection & 6 days\\
+\hline
+Exploring other possibilities & 6 days \\
+\hline
+Creating a GUI for fetching collected state & 6 days\\
+\hline
+Encrypting and sending data to server & 3 days\\
+\hline
+Testing and Debugging & 4 days\\
+\hline
+\end{tabular}
+\end{flushleft}
+\end{frame}
+\section{Task Accomplised}
+\begin{frame}{Task Accomplised}
+\begin{flushleft}
+{\Large \bf Task completed}\\
+	\begin{itemize}
+       \item Relevant reading about firebird V robot.
+	   \item Interrupt based state collection is achieved.
+       \item Transmission of state data of the robot through xbee module.
+       \item GUI development for receiving the state data.
+\end{itemize}
+\end{flushleft}
+\end{frame}
+\section{Challenges Faced}
+\begin{frame}{Challenges Faced}
+\begin{flushleft}
+{\Large\bf Major challenges}\\
+	\begin{itemize}
+       \item Implementation of code keeping in mind user's program should not be interfered.
+		        \item On transmitting through USB, terminal software was receiving correct value but
+         through wireless(using Xbee) transmission sometimes a byte was missing or getting clumsy
+          with other byte.
+          \item Storing the Encryption key for sharing it to the e-yantra server.
+       \item Selecting the type of encryption.
+
+	\end{itemize}
+\end{flushleft}
+\end{frame}
+
+\section{Future Plans}
+\begin{frame}{Future Plans}
+\begin{flushleft}
+{\Large\bf Task remaining}\\
+	\begin{itemize}
+        \item Encryption of the data so that no one can manipulate the original state data.
+        \item Uploading of the collected data to e-Yantra servers.
+        \item Decryption of the data received.
+        \item Testing our code for various other time periods.
+        \item Making our code more secure.
+        \item Proper documentation.
+	\end{itemize}
+\end{flushleft}
+\end{frame}
+
+
+\section{Thank You}
+\begin{frame}{Thank You}
+	\centering THANK YOU !!!
+\end{frame}
+\end{document}

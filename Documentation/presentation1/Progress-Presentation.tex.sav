@@ -1,0 +1,67 @@
+\documentclass[10pt, a4paper]{beamer}
+
+\usetheme{Berkeley}
+\usecolortheme{sidebartab}
+
+\begin{document}
+	\setbeamertemplate{sidebar left}{}
+	\title{Progress Presentation-I}
+	\subtitle{e-Yantra Summer Intership-2016 \\ $<$Robot State Collector$>$}
+	\author{$<$Amit Raushan$>$\\$<$Amanpreet Singh$>$\\
+	Mentor: $<$Shubham Gupta$>$}
+	\institute{IIT Bombay}
+	\date{\today}
+	%\addtobeamertemplate{sidebar left}{}{\includegraphics[scale = 0.3]{logowithtext.png}}
+	\frame{\titlepage}
+
+\setbeamertemplate{sidebar left}[sidebar theme]
+\section{Overview of Project}
+\begin{frame}{Overview of Project}
+	\textbf{Robot state collector} \\
+	\begin{itemize}
+		\item Objective
+       \begin{enumerate}
+                  \item  collection of timed data about the state(like sensor values,velocity,position etc,) of a robot during its traversal along any given path.
+                      \item implementation of a code which can accurately transfer the data through wifi serial communication.
+                          \item development of a GUI that picks up the data from robot through wifi,encrypts it and sends it to e-Yantra servers.
+                    \end{enumerate}
+		\item Deliverables
+          
+	\end{itemize}
+\end{frame}
+
+\section{Overview of Task}
+\begin{frame}{Overview of Task}
+	\begin{itemize}
+		\item List key tasks with deadlines. Use table for better representation
+	\end{itemize}
+\end{frame}
+
+\section{Task Accomplised}
+\begin{frame}{Task Accomplised}
+	\begin{itemize}
+		\item List all tasks that have been accomplished with details of completion viz., What has been proposed, what is accomplished and what is remaining
+		\item Include images/demo of accomplished work
+	\end{itemize}
+\end{frame}
+
+\section{Challenges Faced}
+\begin{frame}{Challenges Faced}
+	\begin{itemize}
+		\item List challenges faced while accomplishing the task.
+	\end{itemize}
+\end{frame}
+
+\section{Future Plans}
+\begin{frame}{Future Plans}
+	\begin{itemize}
+		\item List deliverables for next progress presentation
+	\end{itemize}
+\end{frame}
+
+
+\section{Thank You}
+\begin{frame}{Thank You}
+	\centering THANK YOU !!!
+\end{frame}
+\end{document}
