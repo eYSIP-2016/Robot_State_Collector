@@ -9,11 +9,11 @@
 \begin{document}
 	\setbeamertemplate{sidebar left}{}
 	\title{Progress Presentation-I}
-	\subtitle{e-Yantra Summer Intership-2016 \\ Robot State Collector}
-	\author{Amit Raushan\\Amanpreet Singh\\
+	\subtitle{e-Yantra Summer Internship-2016 \\ Robot State Collector}
+	\author{Amanpreet Singh\\Amit Raushan\\
 	 Mentor:\\ Shubham Gupta}
 	\institute{IIT Bombay}
-	\date{\today}
+	\date{June 30,2016}
 	%\addtobeamertemplate{sidebar left}{}{\includegraphics[scale = 0.3]{logowithtext.png}}
 	\frame{\titlepage}
 
@@ -23,27 +23,40 @@
 \begin{flushleft}
 	{\Large \bf Robot State Collector}\\
 	\begin{itemize}
-		\item Objective
+		\item Objectives
        \begin{enumerate}
-                  \item  To collect timed data of  the state(like sensor values,velocity etc,) of firebird V robot during its traversal along any given path.
-                      \item Implementation of a code which can accurately transfer the data through xbee module.
-                          \item Development of a GUI that picks up the data from the robot through xbee module,encrypts it and sends it to e-Yantra servers.
-\end{enumerate}
-\item Deliverables
-\begin{enumerate}
-\item Design of such a state collection mechanism which does not affect user's program performance.
-\item GUI for extracting information from the robot.
-\item Documentation of the state collection and encryption process.
-\end{enumerate}
-\end{itemize}
+                  \item  To collect data about Robot State (sensor values, velocity etc.) as the robot is being used.
+                      \item To experiment with different transfer mechanisms for transferring State Information from Robot to Laptop/PC.
+                          \item To develop a Java based GUI for:
+                            \begin{enumerate}
+                                \item Receiving State Information from the Robot.
+                                \item Encrypting collected State Information.
+                                \item Sending Encrypted data to e-Yantra Servers.
+                            \end{enumerate}
+                          \item To implement Decryption of State Information sent by Client on Server Side.
+        \end{enumerate}
+    \end{itemize}
 \end{flushleft}
 \end{frame}
 
-\section{Overview of Task}
-\begin{frame}{Overview of Task}
+\begin{frame}{Overview of Project (Cont.)}
+\begin{flushleft}
+	\begin{itemize}
+        \item Deliverables
+            \begin{enumerate}
+                \item State Collection Code for Robot and associated Tutorials.
+                \item GUI with all the functionalities mentioned in Objectives.
+                \item Documentation of state collection, encryption and decryption process.
+            \end{enumerate}
+    \end{itemize}
+\end{flushleft}
+\end{frame}
+
+\section{Overview of Tasks}
+\begin{frame}{Overview of Tasks}
 \begin{flushleft}
 %\vspace{0.35in}
- {\Large \bf Task Lists}\\
+ {\Large \bf List of Tasks}\\
  \vspace{0.1in}
 \begin{tabular}{|c|c|}
 \hline
@@ -67,30 +80,28 @@ Testing and Debugging & 4 days\\
 \end{tabular}
 \end{flushleft}
 \end{frame}
-\section{Task Accomplised}
-\begin{frame}{Task Accomplised}
+\section{Tasks Accomplished}
+\begin{frame}{Tasks Accomplished}
 \begin{flushleft}
-{\Large \bf Task completed}\\
+{\Large \bf Tasks Completed}\\
 	\begin{itemize}
-       \item Relevant reading about firebird V robot.
-	   \item Interrupt based state collection is achieved.
-       \item Transmission of state data of the robot through xbee module.
-       \item GUI development for receiving the state data.
+       \item Relevant reading about ATmega2560 microcontroller.
+	   \item Interrupt based State Collection has been achieved.
+       \item Transmission of State Information from Robot to Laptop via XBee module.
+       \item In the process of finalizing the GUI.
+       \item Decryption of received data.
 \end{itemize}
 \end{flushleft}
 \end{frame}
 \section{Challenges Faced}
 \begin{frame}{Challenges Faced}
 \begin{flushleft}
-{\Large\bf Major challenges}\\
+{\Large\bf Major Challenges}\\
 	\begin{itemize}
-       \item Implementation of code keeping in mind user's program should not be interfered.
-		        \item On transmitting through USB, terminal software was receiving correct value but
-         through wireless(using Xbee) transmission sometimes a byte was missing or getting clumsy
-          with other byte.
-          \item Storing the Encryption key for sharing it to the e-yantra server.
-       \item Selecting the type of encryption.
-
+       \item Minimizing the Interference between State Collection Code and User Code.
+	   \item Dealing with the Unreliability of Wireless Communication via XBee.
+        \item Storing the Encryption key to be shared with the e-Yantra servers.
+       \item Dealing with Block Level Padding for File Decryption.
 	\end{itemize}
 \end{flushleft}
 \end{frame}
@@ -98,13 +109,12 @@ Testing and Debugging & 4 days\\
 \section{Future Plans}
 \begin{frame}{Future Plans}
 \begin{flushleft}
-{\Large\bf Task remaining}\\
+{\Large\bf Tasks Remaining}\\
 	\begin{itemize}
-        \item Encryption of the data so that no one can manipulate the original state data.
-        \item Uploading of the collected data to e-Yantra servers.
-        \item Decryption of the data received.
-        \item Testing our code for various other time periods.
-        \item Making our code more secure.
+        \item Adding Checksum to preserve Integrity of Received file.
+        \item Uploading collected data to e-Yantra servers.
+        \item Testing State Collection code for different time periods.
+        \item Making the code more secure.
         \item Proper documentation.
 	\end{itemize}
 \end{flushleft}
@@ -113,6 +123,6 @@ Testing and Debugging & 4 days\\
 
 \section{Thank You}
 \begin{frame}{Thank You}
-	\centering THANK YOU !!!
+	\centering{\LARGE Thank You!}
 \end{frame}
 \end{document}
