@@ -1,6 +1,5 @@
 
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,11 +7,14 @@ import java.io.RandomAccessFile;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
 import java.security.cert.Certificate;
+import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -73,7 +75,7 @@ public class decp {
         }
         FileOutputStream fos = new FileOutputStream("AESKey.txt");
         fos.write(m);
-        fos.close();            
+        fos.close();
         length = dIn.readInt();
         m = new byte[length];
         if (length > 0) {
@@ -82,20 +84,29 @@ public class decp {
         fos = new FileOutputStream("output.txt");
         fos.write(m);
         fos.close();
-        
+
         length = dIn.readInt();
         m = new byte[length];
         if (length > 0) {
             dIn.readFully(m, 0, m.length);
         }
-        fos = new FileOutputStream("publicKeyFromUser.txt.txt");
+        fos = new FileOutputStream("publicKeyFromUser.txt");
         fos.write(m);
         fos.close();
+        
+        Signature sign = Signature.getInstance("MD5WithRSA");
+        
 
+        RandomAccessFile f = new RandomAccessFile("publicKeyFromUser.txt", "r");
+        byte[] b = new byte[(int) f.length()];
+        f.read(b);
+        PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(b));
+        sign.initVerify(publicKey);
+        
 
         KeyPair kp = getkey();
-        RandomAccessFile f = new RandomAccessFile("AESKey.txt", "r");
-        byte[] b = new byte[(int) f.length()];
+        f = new RandomAccessFile("AESKey.txt", "r");
+        b = new byte[(int) f.length()];
         f.read(b);
         Cipher desCipher;
         desCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
@@ -112,6 +123,11 @@ public class decp {
         System.out.println(f.length());
         b = new byte[(int) f.length()];
         f.read(b);
+        
+        sign.update(b);
+        
+        System.out.println(sign.verify(sig));
+        
         System.out.println(b.length);
         desCipher.init(Cipher.DECRYPT_MODE, myDesKey);
         textDecrypted = desCipher.doFinal(b);
