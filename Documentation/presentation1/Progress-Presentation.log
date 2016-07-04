@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.6.23)  30 JUN 2016 01:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.6.23)  4 JUL 2016 11:00
 entering extended mode
 **C:/Users/Hp/Desktop/presentation1/Progress-Presentation.tex
 (C:/Users/Hp/Desktop/presentation1/Progress-Presentation.tex
@@ -1008,7 +1008,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 128.
 Here is how much of TeX's memory you used:
  17227 strings out of 493335
  324181 string characters out of 3146173
- 396874 words of memory out of 3000000
+ 396875 words of memory out of 3000000
  20303 multiletter control sequences out of 15000+200000
  50012 words of font info for 45 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1018,7 +1018,7 @@ lmss10.pfb><C:/localtex/fonts/type1/public/lm/lmss12.pfb><C:/localtex/fonts/typ
 e1/public/lm/lmss17.pfb><C:/localtex/fonts/type1/public/lm/lmss8.pfb><C:/localt
 ex/fonts/type1/public/lm/lmss9.pfb><C:/localtex/fonts/type1/public/lm/lmssbx10.
 pfb>
-Output written on Progress-Presentation.pdf (8 pages, 182507 bytes).
+Output written on Progress-Presentation.pdf (8 pages, 182506 bytes).
 PDF statistics:
  321 PDF objects out of 1000 (max. 8388607)
  23 named destinations out of 1000 (max. 500000)
