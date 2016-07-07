@@ -1,1 +1,4 @@
-http://ediy.com.my/blog/item/92-sharp-gp2y0a21-ir-distance-sensors
+http://ediy.com.my/blog/item/92-sharp-gp2y0a21-ir-distance.
+
+for other sharp sensors
+http://www.dfrobot.com/wiki/index.php/SHARP_GP2Y0A41SK0F_IR_ranger_sensor_(4-30cm)_SKU:SEN0143#formulas
