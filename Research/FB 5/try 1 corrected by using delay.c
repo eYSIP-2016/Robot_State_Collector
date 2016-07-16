@@ -1,7 +1,6 @@
 /********************************************************************************
 *Description:  Serial communication
 *Objective:    Trying to send integer to laptop via USB serial communication
-*Problem :     We can't send the integer through USART directly.
 *Solution:     We converted the integer into digits & send them as characters using send(int) function.
 *Bug     :     Some digits are missed during transmission which was later corrected by using delay but still this was not appropriate..
 *********************************************************************************/
@@ -50,9 +49,6 @@ void lcd_port_config (void)
  DDRC = DDRC | 0xF7;    //all the LCD pin's direction set as output
  PORTC = PORTC & 0x80;  // all the LCD pins are set to logic 0 except PORTC 7
 }
-
-
-
 void adc_pin_config (void)
 {
  DDRF = 0x00;  //set PORTF direction as input
@@ -60,8 +56,6 @@ void adc_pin_config (void)
  DDRK = 0x00;  //set PORTK direction as input
  PORTK = 0x00; //set PORTK pins floating
 }
-
-
 void port_init(void)
 {
  motion_pin_config();
@@ -70,7 +64,6 @@ void port_init(void)
  buzzer_pin_config();           
  adc_pin_config();
 }
-
 void spi_init(void)
 {
  SPCR = 0x53; //setup SPI
@@ -88,8 +81,6 @@ void adc_init(void)
 	ACSR = 0x80;
 	ADCSRA = 0x86;		//ADEN=1 --- ADIE=1 --- ADPS2:0 = 1 1 0
 }
-
-
 unsigned char spi_master_tx_and_rx (unsigned char data)
 {
  unsigned char rx_data = 0;
@@ -130,7 +121,6 @@ unsigned char a;
 
 void sensor_data_interpretation(void) //ld, fd, rd, light int
 {
-
  SHARP_1 = ADC_Conversion(9);
  
 }
@@ -197,7 +187,7 @@ unsigned int converttomm(unsigned int a )
   return b;
 
 }
-
+//-------------------------------------------------------------------------------
 /***Function to convert integer into digits and send them as character********/
 void send ( int n)
 { 
@@ -207,33 +197,27 @@ void send ( int n)
     a[i++] = n % 10; // assign the last digit
     n /= 10;        // "right shift" the number
  }
- UDR2 = a[2] + 48;
- UDR2 = a[1] + 48;
- UDR2 = a[0] + 48;
+ UDR2 = a[2] + 48;  //sending first digit 
+ UDR2 = a[1] + 48;  //sending second digit
+ UDR2 = a[0] + 48;  //sending third digit
 }
-
+//-------------------------------------------------------------------
 SIGNAL(SIG_USART2_RECV) 		// ISR for receive complete interrupt
 {
-
-	data = UDR2; 				//making copy of data from UDR1 in 'data' variable				//echo data back to PC
+	data = UDR2; 				//making copy of data from UDR2 in 'data' variable				//echo data back to PC
 
 		if(data == 0x35) //ASCII value of 5
 		{
 		  lcd_init();
-	      lcd_cursor(1,1);
-	      lcd_string("Data r");
-	      sensor_data_interpretation();
+	          lcd_cursor(1,1);
+	          lcd_string("Data r");
+	          sensor_data_interpretation();
 		  lcd_print(2,1,converttomm_41sk(SHARP_1),3);
 		  lcd_print(2,5,converttomm(SHARP_1),3);
 		  d =converttomm(SHARP_1);
 		  send(d);
 }
-
-
-
 }
-
-
 //Function To Initialize all The Devices
 void init_devices()
 {
@@ -244,9 +228,8 @@ void init_devices()
  spi_init();
  lcd_set_4bit();
  adc_init();
-sei();   //Enables the global interrupts
+ sei();   //Enables the global interrupts
 }
-
 //Main Function
 int main(void)
 {
