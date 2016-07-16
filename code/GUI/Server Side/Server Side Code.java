@@ -58,90 +58,95 @@ public class decp {
 
     public static void main(String args[]) throws IOException, Exception {
         // InetAddress ip = InetAddress.getLocalHost();
-        
+
         KeyPair kp = getkey();
-        
+
         ServerSocket s = new ServerSocket(2194);
-        
+
         System.out.println("Started:" + s);
-        Socket s1 = s.accept();
-        DataInputStream dIn = new DataInputStream(s1.getInputStream());
-        int length = dIn.readInt();
-        byte[] usr = new byte[length];
-        if (length > 0) {
-            dIn.readFully(usr, 0, usr.length);
+        String usrnm;
+
+        while (true) {
+            Socket s1 = s.accept();
+            DataInputStream dIn = new DataInputStream(s1.getInputStream());
+            int length = dIn.readInt();
+            byte[] usr = new byte[length];
+            if (length > 0) {
+                dIn.readFully(usr, 0, usr.length);
+            }
+
+            usrnm = new String(usr);
+
+            System.out.println("USER NAME " + usrnm);
+
+            dIn = new DataInputStream(s1.getInputStream());
+            length = dIn.readInt();
+            byte[] pass = new byte[length];
+            if (length > 0) {
+                dIn.readFully(pass, 0, pass.length);
+            }
+
+            String pwd = new String(pass);
+            System.out.println("Pass " + pwd);
+
+            byte b[];
+
+            DataOutputStream dOut = new DataOutputStream(s1.getOutputStream());
+
+            if (usrnm.equals("test") && pwd.equals("123")) {
+
+                b = "accept".getBytes();
+                dOut.writeInt(b.length);
+                dOut.write(b);
+                System.out.println("User Accepted");
+                break;
+                
+
+            } else {
+
+                b = "bad".getBytes();
+                dOut.writeInt(b.length);
+                dOut.write(b);
+                System.out.println("Access Denied");
+
+            }
+            s1.close();
         }
         
-        String usrnm = new String(usr);
-            
-        System.out.println("USER NAME" + usrnm);
+        Socket s4 = s.accept();
         
-        dIn = new DataInputStream(s1.getInputStream());
-        length = dIn.readInt();
-        byte[] pass = new byte[length];
-        if (length > 0) {
-            dIn.readFully(pass, 0, pass.length);
-        }
+        DataOutputStream dOut = new DataOutputStream(s4.getOutputStream());
+        byte[] b = usrnm.getBytes();
+        dOut.writeInt(b.length);
+        dOut.write(b);
         
-        String pwd = new String(pass);
-        System.out.println("Pass" + pwd);
-        
-        byte b[];
-        
-        DataOutputStream dOut = new DataOutputStream(s1.getOutputStream());
-        
-        if (usrnm.equals("test") && pwd.equals("123")){
-            
-            
-            b = "accept".getBytes();
-            dOut.writeInt(b.length);
-            dOut.write(b);
-            
-        }
-        else {
-            
-            b = "bad".getBytes();
-            dOut.writeInt(b.length);
-            dOut.write(b);
-            
-        } 
-        
-        s1.close();
-        
-        
-        
-        
+        s4.close();
+
         Socket s3 = s.accept();
-        
-        
-        dIn = new DataInputStream(s3.getInputStream());
-        
-        length = dIn.readInt();
+
+        DataInputStream dIn = new DataInputStream(s3.getInputStream());
+
+        int length = dIn.readInt();
         byte[] text = new byte[length];
         if (length > 0) {
             dIn.readFully(text, 0, text.length);
         }
-        
-        String a = new String(text , "UTF-8");
-        
-        System.out.println(a);
-        
-               
-        s3.close();
-                
-        Socket s2 = s.accept();
-        
 
-        
-        
+        String a = new String(text, "UTF-8");
+
+        System.out.println(a);
+
+        s3.close();
+
+        Socket s2 = s.accept();
+
         dIn = new DataInputStream(s2.getInputStream());
         length = dIn.readInt();
         byte[] m = new byte[length];
         if (length > 0) {
             dIn.readFully(m, 0, m.length);
         }
-       
-        
+
         FileOutputStream fos = new FileOutputStream("AESKey.txt");
         fos.write(m);
         fos.close();
@@ -156,49 +161,40 @@ public class decp {
 
         String md5_2 = org.apache.commons.codec.digest.DigestUtils.md5Hex(m);
         System.out.println(md5_2);
-        
 
-        
-       if (a.equals(md5_2)) {
-        
-        
-       
-        
-         RandomAccessFile f = new RandomAccessFile("AESKey.txt", "r");
-        b = new byte[(int) f.length()];
-        f.read(b);
-        Cipher desCipher;
-        desCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        desCipher.init(Cipher.DECRYPT_MODE, kp.getPrivate());
-        byte[] textDecrypted = desCipher.doFinal(b);
-        Key myDesKey = new SecretKeySpec(textDecrypted, 0, textDecrypted.length, "AES");
+        if (a.equals(md5_2)) {
 
-        String stringKey = myDesKey.toString();
-        System.out.println("read Key: " + stringKey);
+            RandomAccessFile f = new RandomAccessFile("AESKey.txt", "r");
+            b = new byte[(int) f.length()];
+            f.read(b);
+            Cipher desCipher;
+            desCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            desCipher.init(Cipher.DECRYPT_MODE, kp.getPrivate());
+            byte[] textDecrypted = desCipher.doFinal(b);
+            Key myDesKey = new SecretKeySpec(textDecrypted, 0, textDecrypted.length, "AES");
 
-        desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            String stringKey = myDesKey.toString();
+            System.out.println("read Key: " + stringKey);
 
-        f = new RandomAccessFile("output.txt", "r");
-        System.out.println(f.length());
-        b = new byte[(int) f.length()];
-        f.read(b);
-        
-       
+            desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 
-        
-        System.out.println(b.length);
-        desCipher.init(Cipher.DECRYPT_MODE, myDesKey);
-        textDecrypted = desCipher.doFinal(b);
-        fos = new FileOutputStream("decp.txt");
-        fos.write(textDecrypted);
-        fos.close();
-        System.out.println("No Mods");
-                        
-       }
-       else {
-        System.out.println("Mods");
-       }
-          
+            f = new RandomAccessFile("output.txt", "r");
+            System.out.println(f.length());
+            b = new byte[(int) f.length()];
+            f.read(b);
+
+            System.out.println(b.length);
+            desCipher.init(Cipher.DECRYPT_MODE, myDesKey);
+            textDecrypted = desCipher.doFinal(b);
+            fos = new FileOutputStream("decp.txt");
+            fos.write(textDecrypted);
+            fos.close();
+            System.out.println("No Mods");
+
+        } else {
+            System.out.println("Mods");
+        }
+
         s2.close();
         s.close();
     }
