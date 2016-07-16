@@ -7,8 +7,8 @@
 *Mentor's name:         Shubham Gupta
 *Filename:              state_collect.c
 *Functions:             _adc_pinconfig (),_adc_init(),_conv_adc(unsigned char),converttomm_41sk(unsigned int)._timer4_init(),
-                        send ( int),ISR(TIMER4_OVF_vect),_uart0_init(),_port_init(),_init_devices(), left_encoder_pin_config (),
-                        right_encoder_pin_config (),left_position_encoder_interrupt_init (),right_position_encoder_interrupt_init (),
+                        send ( int),ISR(TIMER4_OVF_vect),_uart0_init(),_port_init(),_init_devices(), _left_encoder_pin_config (),
+                        _right_encoder_pin_config (),_left_position_encoder_interrupt_init (),_right_position_encoder_interrupt_init (),
                         ISR(INT5_vect),ISR(INT4_vect),velocity_leftwheel_cmpersec(),velocity_rightwheel_cmpersec()
 
 *Global variables:       count,sp1,lwl,cwl,rwl,IR1,leftpulse,rightpulse
@@ -290,28 +290,28 @@ void _uart0_init(void)
 }
 
 /*
-* Function Name:                   left_encoder_pin_config
+* Function Name:                   _left_encoder_pin_config
 * Input:			               NONE
 * Output:                          configure INT4 (PORTE 4) pin as input for the left position encoder.
 * Logic:			               1 sets the pin as output and 0 for input.
-* Example Call:		               left_encoder_pin_config ();
+* Example Call:		               -left_encoder_pin_config ();
 */
 
 
-void left_encoder_pin_config (void)
+void _left_encoder_pin_config (void)
 {   
 	DDRE  = DDRE & 0xEF;  //Set the direction of the PORTE 4 pin as input
 	PORTE = PORTE | 0x10; //Enable internal pull-up for PORTE 4 pin
 }
 /*
-* Function Name:                   right_encoder_pin_config
+* Function Name:                   _right_encoder_pin_config
 * Input:			               NONE
 * Output:                          configure INT5 (PORTE 5) pin as input for the left position encoder.
 * Logic:			               1 sets the pin as output and 0 for input.
-* Example Call:		               right_encoder_pin_config ();
+* Example Call:		               _right_encoder_pin_config ();
 */
 
-void right_encoder_pin_config (void)
+void _right_encoder_pin_config (void)
 {  
 	 DDRE  = DDRE & 0xDF;  //Set the direction of the PORTE 5 pin as input
 	PORTE = PORTE | 0x20; //Enable internal pull-up for PORTE 5 pin
@@ -328,19 +328,19 @@ void _port_init()
 {
 
 	_adc_pinconfig();
-	left_encoder_pin_config () ;
-   right_encoder_pin_config (); 
+	_left_encoder_pin_config () ;
+    _right_encoder_pin_config (); 
 }
 
 	/*
-	* Function Name:     left_position_encoder_interrupt_init
+	* Function Name:     _left_position_encoder_interrupt_init
 	* Input:			 NONE
 	* Output:            Enable Interrupt INT4 for left position encoder.
 	* Logic :            NONE
-	* Example Call:		 left_position_encoder_interrupt_init ();
+	* Example Call:		 _left_position_encoder_interrupt_init ();
 	*/
 	
-void left_position_encoder_interrupt_init (void)
+void _left_position_encoder_interrupt_init (void)
 	{
 		cli(); //Clears the global interrupt
 		EICRB = EICRB | 0x02; // INT4 is set to trigger with falling edge
@@ -348,14 +348,14 @@ void left_position_encoder_interrupt_init (void)
 		sei();   // Enables the global interrupt
 	}
 /*
-	* Function Name:     right_position_encoder_interrupt_init
+	* Function Name:     _right_position_encoder_interrupt_init
 	* Input:			 NONE
 	* Output:            Enable Interrupt INT5 for right position encoder.
 	* Logic :            NONE
-	* Example Call:		 right_position_encoder_interrupt_init ();
+	* Example Call:		 _right_position_encoder_interrupt_init ();
 	*/
 
-	void right_position_encoder_interrupt_init (void)
+	void _right_position_encoder_interrupt_init (void)
 	{
 		cli(); //Clears the global interrupt
 		EICRB = EICRB | 0x08; // INT5 is set to trigger with falling edge
@@ -435,8 +435,8 @@ void _init_devices()
 	_adc_init();
 	_uart0_init(); //Initialize UART0 for wireless serial communication
 	TIMSK4 = 0x01; //Timer/Counter 4 Overflow interrupt is enabled
-	left_position_encoder_interrupt_init ();
-	right_position_encoder_interrupt_init ();
+	_left_position_encoder_interrupt_init ();
+	_right_position_encoder_interrupt_init ();
 	sei();         // Enables the global interrupt
 }
 #endif /*STATE_COLLECT_H */
