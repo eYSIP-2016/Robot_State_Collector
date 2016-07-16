@@ -40,10 +40,8 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
     java.io.FileInputStream fis = null; // Variable for reading data from files
     java.io.FileOutputStream fos = null; // Variable for wriing data to 
     byte[] signatureBytes;
-    
-    
-    
-    
+    String ip;
+
     public test() {
         initComponents();
     }
@@ -252,21 +250,27 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
             FileOutputStream fos = new FileOutputStream("output.txt");
             fos.write(textEncrypted);
             fos.close();
-            
+
             FileInputStream fis = new FileInputStream(new File("output.txt"));
             String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
             System.out.println(md5);
             fis.close();
-            
-            Socket s = new Socket("192.168.0.112", 2194);
+
+            RandomAccessFile fi = new RandomAccessFile("ip.txt", "r");
+            b = new byte[(int) fi.length()];
+            fi.read(b);
+            fi.close();
+
+            ip = new String(b);
+            System.out.println(ip);
+
+            Socket s = new Socket(ip, 2194);
             b = md5.getBytes("UTF-8");
             DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
             dOut.writeInt(b.length); // write length of the message
             dOut.write(b);
             s.close();
-              
-            
-                       
+
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
@@ -275,7 +279,6 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
             fos = new FileOutputStream("AESKey.txt");
             fos.write(cipherText);
             fos.close();
-            
 
         } catch (Exception e) {
             System.out.println("Exception" + e.toString());
@@ -287,17 +290,19 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
             // TODO add your handling code here:
+
+            byte b[];
             
-            Socket s = new Socket("192.168.0.112", 2194);
-            
-            byte b[]; 
+            System.out.println(ip);
+
+            Socket s = new Socket(ip, 2194);
+
             DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
-            
-            
+
             RandomAccessFile f = new RandomAccessFile("AESKey.txt", "r");
             b = new byte[(int) f.length()];
             f.read(b);
-            
+
             dOut.writeInt(b.length); // write length of the message
             dOut.write(b);           // write the message
             System.out.println("Done");
@@ -306,8 +311,7 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
             f.read(b);
             dOut.writeInt(b.length); // write length of the message
             dOut.write(b);
-            
-            
+
         } catch (IOException ex) {
             Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -351,7 +355,7 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
  /*
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws FileNotFoundException, IOException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -373,7 +377,7 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(test.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+        //</editor-fold
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
