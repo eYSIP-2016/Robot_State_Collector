@@ -2,7 +2,7 @@
 Communication was achieved with the help of x-bee b/w laptop and firebird V..
 X-bee was set on a baud rate of 9600. But if we set the baud rate to 115200 there seems to be a problem.
 
-Random code that utilises. checking if using timer to send data interfers with the interrupts.
+Random code that utilises interrupts. Checking if using timer to send data interfers with the interrupts.
 
 Delay is being used to avoid overlapping of data. it occurs as the first transmission is not complete and next transmission starts to take place. 
 
