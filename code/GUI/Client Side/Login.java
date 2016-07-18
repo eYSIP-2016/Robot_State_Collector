@@ -24,7 +24,9 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     
-    static String ip;
+    static String ip;            // Variable for reading the ip address from "ip.txt" and using it throughout thr run.
+    byte b[];                    // Declaring a byte array which will be used as a buffer
+    
     public Login() {
         initComponents();
     }
@@ -45,6 +47,7 @@ public class Login extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login to Server");
 
         jLabel1.setText("Team ID");
 
@@ -102,51 +105,64 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+       /*
+* Function Name: wr_2_server(Socket s)
+* Input: Socket name
+* Output: none 
+* Description: Writes the contents of the buffer b to the server.
+* Example Call: wr_2_server(s);
+     */
+    void wr_2_server(Socket s) throws IOException {
+
+        DataOutputStream dOut = new DataOutputStream(s.getOutputStream());      // Variable to send the data back to the server.
+        dOut.writeInt(b.length);                                                // write length of the message
+        dOut.write(b);                                                          // write the message
+    }
+    
+    
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String username = jTextField1.getText();
-        String pass = jTextField2.getText();
+        
+        String username = jTextField1.getText();                                // Read the content of username field
+        String pass = jTextField2.getText();                                    // Read the content of password field
 
-        byte b[];
+        
 
         try {
-            Socket s = new Socket(ip, 2194);
+            Socket s = new Socket(ip, 2194);                                    // Opens a new connection with the server
 
-            b = username.getBytes();
-            DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
-            dOut.writeInt(b.length); // write length of the message
-            dOut.write(b);
+            b = username.getBytes();                                            // Gets byte array of username in the buffer
+            wr_2_server(s);                                                     // Sends the byte array of username to the server
 
-            b = pass.getBytes();
-            dOut.writeInt(b.length); // write length of the message
-            dOut.write(b);
+            b = pass.getBytes();                                                // Gets byte array of password in the buffer
+            wr_2_server(s);                                                     // Sends the byte array of password to the server
 
-            DataInputStream dIn = new DataInputStream(s.getInputStream());
-            int length = dIn.readInt();
+            DataInputStream dIn = new DataInputStream(s.getInputStream());      // Initialises a variable which reads the incoming data from the server
+            int length = dIn.readInt();                                         // Reads the integer value coming from the server
 
-            byte[] rec = new byte[length];
-            if (length > 0) {
-                dIn.readFully(rec, 0, rec.length);
+            byte[] rec = new byte[length];                                      // Creating a byte array with length received from server
+            if (length > 0) {   
+                dIn.readFully(rec, 0, rec.length);                              // Reading the complete data from the server
             }
 
-            String abc = new String(rec);
+            String abc = new String(rec);                                       // Converting the receieved byte array to string
 
             if (abc.equals("accept")) {
 
-                test gui = new test();
-                gui.setVisible(true);
-                s.close();
-                dispose();
+                test gui = new test();                                          // Open the Gui if we receive "accept"
+                gui.setVisible(true);                                           // Make that GUI visible.
+                s.close();                                                      // Close the connection with server.
+                dispose();                                                      // Close the login page.
 
             } else {
-                JOptionPane.showMessageDialog(null, "Wrong Password / Username");
-                jTextField1.setText("");
-                jTextField2.setText("");
-                jTextField1.requestFocus();
+                JOptionPane.showMessageDialog(null, "Wrong Password / Username");  // Show a dialog box displaying "Wrong Password / Username"
+                jTextField1.setText("");                                           // Reset the username field.
+                jTextField2.setText("");                                           // Reset the password field.
+                jTextField1.requestFocus();                                        // Shift Focus to username text field.
             }
 
         } catch (IOException ex) {
@@ -156,9 +172,15 @@ public class Login extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    
+   
+           
     /**
      * @param args the command line arguments
      */
+    
+    
+    // MAIN
     public static void main(String args[]) throws FileNotFoundException, IOException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -183,18 +205,18 @@ public class Login extends javax.swing.JFrame {
         }
         //</editor-fold>
         
-        RandomAccessFile f = new RandomAccessFile("ip.txt", "r");
-        byte[] b = new byte[(int) f.length()];
-        f.read(b);
-        f.close();
+        RandomAccessFile f = new RandomAccessFile("ip.txt", "r");               // Open the file "ip.txt" in read mode.
+        byte[] b = new byte[(int) f.length()];                                  // Make a buffer of the size of the file.
+        f.read(b);                                                              // Read the contents of the file into the buffer.
+        f.close();                                                              // Close the file
                
-        ip = new String(b);
-        System.out.println(ip);
+        ip = new String(b);                                                     // Store the contents of buffer in a string.
+        System.out.println(ip);                                                 // Display the string on the console.
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new Login().setVisible(true);                                   // Make the login jFrame visible. 
             }
         });
     }
