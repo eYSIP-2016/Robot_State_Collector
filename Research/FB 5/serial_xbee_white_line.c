@@ -1,16 +1,16 @@
 /*********************************************************************************************************************
-* Objective :  To save the space by updating the previous value when there is not much variation in reading
-* Description: In this program  if the difference between previous data & data to be stored is less than 5 then previous value is updated only,
-               in this way it saves some space.
-* Data is send through USB serial communication after every 1 second.			   
-* Now Timer 4 interrupt is used to collect the state after every 1 seconds.
+* Objective :  Implementing wireless serial communication via Xbee module.
+* Description: Through this program we are sending the sensor values of robot (while white line sensing program is 
+               running in the robot) to laptop via wireless serial communication after every 0.5 second using xbee module.
+               Now we are not storing the state value in robot,we are directly sending it to the laptop via xbee module.
+               It solved our state constraint problem.
+* Timer 4 interrupt is used to collect the state after every 0.5 seconds.
 * Bug: sometimes correct data is not received at receiver side i.e. some digits of an integer are missing.
-
 *************************************************************************************************************************/
+//Header files 
 
 #define __OPTIMIZE__ -O0
 #define F_CPU 14745600
-//header file
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -22,7 +22,8 @@
 int read = 1;
 unsigned char SHARP_1;
 unsigned char dt;
-char a[3];  //array having size 3
+char a[3];
+unsigned char flag = 0;
 unsigned char data;
 unsigned char ADC_flag;
 unsigned char ADC_Conversion(unsigned char);
@@ -30,6 +31,7 @@ unsigned char ADC_Value;
 unsigned char Left_white_line = 0;     //variable to store left white line sensor value
 unsigned char Center_white_line = 0;   //variable to store center white line sensor value
 unsigned char Right_white_line = 0;    //variable to store right white line sensor value
+
 unsigned long int ShaftCountLeft = 0; //to keep track of left position encoder 
 unsigned long int ShaftCountRight = 0; //to keep track of right position encoder
 unsigned int Degrees; //to accept angle in degrees for turning
@@ -232,8 +234,7 @@ void sensor_data_interpretation(void) //ld, fd, rd, light int
  Right_white_line = ADC_Conversion(1);	//Getting data of Right WL Sensor
  
 }
-
-//function used for distance calculation of sharp sensor
+//function used for distance calculation(in mm) of sharp sensor
 unsigned int converttomm(unsigned int a )
 {
   double b;
@@ -246,8 +247,7 @@ unsigned int converttomm(unsigned int a )
   return b;
 
 }
-
-//function used for distance calculation of sharp sensor of 41sk type
+//function used for distance calculation(in mm) of 41sk type sharp sensor
 unsigned int converttomm_41sk(unsigned int a)
 {
   double b;
@@ -259,123 +259,37 @@ unsigned int converttomm_41sk(unsigned int a)
   b = (int)b; 
   return b;
 }
-//--------------------------------------------------------
-//TIMER4 initialize - prescale:1024
-// WGM: 0) Normal, TOP=0xFFFF
-// desired value: 1Hz
-// actual value:  1.000Hz (0.0%)
-//timer4 interrupt will overflow after 1 second.
-void timer4_init(void)
+/*
+* Function Name:	_timer4_init
+* Input:			NONE
+* Output:           Initialization of timer/counter with prescaler :256 in fast PWM mode.
+                    TOP value is set to 7080(hex) which will generate an interrupt after every 0.5 seconds.
+* Logic:			Using the value of Special Function Register, the function configures the timer Registers
+* Example Call:		NONE
+*
+*/
+void _timer4_init(void)
 {
- TCCR4B = 0x00; //stop
- TCNT4H = 0x1F; //Counter higher 8 bit value
- TCNT4L = 0x01; //Counter lower 8 bit value
- OCR4AH = 0x00; //Output compare Register (OCR)- Not used
- OCR4AL = 0x00; //Output compare Register (OCR)- Not used
- OCR4BH = 0x00; //Output Compare Register (OCR)- Not used
- OCR4BL = 0x00; //Output Compare Register (OCR)- Not used
- OCR4CH = 0x00; //Output Compare Register (OCR)- Not used
- OCR4CL = 0x00; //Output Compare Register (OCR)- Not used
- ICR4H  = 0x00; //Input Capture Register (ICR)- Not used
- ICR4L  = 0x00; //Input Capture Register (ICR)- Not used
- TCCR4A = 0x00; 
- TCCR4C = 0x00;
- TCCR4B = 0x04; //start Timer
+	TCCR4B = 0x00; //stop
+	OCR4AH = 0x00; //Output Compare Register (OCR)- Not used
+	OCR4AL = 0x00; //Output compare Register (OCR)- Not used
+	OCR4BH = 0x00; //Output compare Register (OCR)- Not used
+	OCR4BL = 0x00; //Output compare Register (OCR)- Not used
+	OCR4CH = 0x00; //Output compare Register (OCR)- Not used
+	OCR4CL = 0x00; //Output compare Register (OCR)- Not used
+	ICR4   = 0x7080; //Input Capture Register (ICR)  
+	TCCR4C = 0x00;
+	TCCR4A = 0b00000010;// Normal port operation........WGM41:40=1 0
+	TCCR4B = 0b00011100; //start Timer.......WGM43:42=1 1........CS42:40=1 0 0(clkI/O/256 (From prescaler)) 
 }
-
-int	 store[4][10]; //2-d array having 4 rows & 10 column.
-int count = 0;
-//This ISR can be used to schedule events like refreshing ADC data, LCD data.
-//This interrupt service routine will be called after every 1 second
-ISR(TIMER4_OVF_vect)
-{
- lcd_print(1, 1, count, 3);
- TCNT4H = 0x1F; //reload counter high value
- TCNT4L = 0x01; //reload counter low value
- if (read == 1)
- {
-  //sensor_data_interpretation();
-  if(count == 0)
-  {  
-   for(int i = 0; i <4; i++)
-   {
-    if(i == 0 )
-    {
-    // sensor_data_interpretation();
-     lcd_print(1, 10, converttomm_41sk(SHARP_1), 3);
-     store[i][count]= converttomm_41sk(SHARP_1); //storing sharp sensor value in array.
-    }
-    if(i == 1 )
-    {
-     //sensor_data_interpretation();
-     lcd_print(1, 10, Center_white_line, 3);
-     store[i][count]=(int) Center_white_line; //storing center white line sensor value in array.
-    }
-    if(i == 2 )
-    {
-	 //sensor_data_interpretation();
-     lcd_print(1, 10, Left_white_line, 3);
-     store[i][count]=(int) Left_white_line;//storing left white line sensor value in array.
-    }
-    if(i == 3 )
-    {
-     //sensor_data_interpretation();
-     lcd_print(1, 10, Right_white_line, 3);
-     store[i][count]=(int) Right_white_line;//storing right white line sensor value in array.
-    }
-   }
-  }
-  if (count >0)
-  {//
-   for(int i = 0; i <4; i++)
-   {
-	   //storing the value only when the difference between previous value & next value is more than 5
-    if(i == 0 && ( (store[i][count-1]+5)<converttomm_41sk(SHARP_1) || (store[i][count-1]-5)>converttomm_41sk(SHARP_1) ))
-    {
-	 //sensor_data_interpretation();
-     lcd_print(1, 10, converttomm_41sk(SHARP_1), 3);
-     store[i][count]= converttomm_41sk(SHARP_1);
-    }
-	//storing the value only when the difference between previous value & next value is more than 5
-    if(i == 1 && ( (store[i][count-1]+5)<(Center_white_line-5) || (store[i][count-1]-5)>Center_white_line ))
-    {
-     //sensor_data_interpretation();
-     lcd_print(1, 10, Center_white_line, 3);
-     store[i][count]=(int) Center_white_line;
-    }
-	//storing the value only when the difference between previous value & next value is more than 5
-    if(i == 2 && ((store[i][count-1]+5)<(Left_white_line-5) || (store[i][count-1]-5)>Left_white_line))
-    {
-     //sensor_data_interpretation();
-     lcd_print(1, 10, Left_white_line, 3);
-     store[i][count]=(int) Left_white_line;
-    }
-	//storing the value only when the difference between previous value & next value is more than 5
-    if(i == 3 && ((store[i][count-1]+5)<(Right_white_line-5) || (store[i][count-1]-5)>Right_white_line))
-    {
-     //sensor_data_interpretation();
-     lcd_print(1, 10, Right_white_line, 3);
-     store[i][count]=(int) Right_white_line;
-    }
-   }
-  }
-  count++;
- }   
-
-} 
-
-//Initializing USB serial communication 
-void uart2_init(void)
-{
- UCSR2B = 0x00; //disable while setting baud rate
- UCSR2A = 0x00;
- UCSR2C = 0x06;
- UBRR2L = 0x5F; //set baud rate lo
- UBRR2H = 0x00; //set baud rate hi
- UCSR2B = 0x98;
-}
-
-/***Function to convert integer into digits and send them as character********/
+/*
+* Function Name:	send
+* Input:			3 digit integer value to be sent through serial communication.
+* Output:           Integer is sent as string via serial communication.
+* Logic:			convert t Numbers (Integers) to string and then send the string.
+* Example Call:		send(345);
+*
+*/
 void send ( int n)
 { 
   int z = 0;
@@ -389,54 +303,44 @@ void send ( int n)
     c /= 10; // "right shift" the number
  }
  _delay_ms(10);
- UDR2 = a[2] + 48;   //sending first digit
- UDR2 = a[1] + 48;   //sending second digit
+ UDR2 = a[2] + 48;       //sending first digit
+ UDR2 = a[1] + 48;       //sending second digit
  _delay_ms(10);
- UDR2 = a[0] + 48;   //sending third digit
- UDR2 = 32;          //To give space between two integer
+ UDR2 = a[0] + 48;      //sending third digit
+ UDR2 = 32;             //To give space between two integer
 }
-/*
-   Using this function stored data in firebird V is collected to serial terminal when 5 is sent from serial terminal.
 
-*/
-SIGNAL(SIG_USART2_RECV) 		// ISR for receive complete interrupt
+int count = 0;
+//This ISR can be used to schedule events like refreshing ADC data, LCD data.
+//Interrupt is called after ever 0.5 second when Timer4 has overflowed.
+ISR(TIMER4_OVF_vect)
 {
-    cli();
-
-	data = UDR2; 				//making copy of data from UDR2 in 'data' variable
-		if(data == 0x35) //ASCII value of 5
-		{
-		  lcd_init();
-        //Printing the stored value in lcd & sending it to laptop via USB.
-		for (int i = 0 ; i < count ; i++)
-		{
-         for (int j = 0 ; j < 4 ; j++)
-		 {
-			 //Printing the stored value in lcd & sending it to laptop via USB.
-		  lcd_print(2, 10, store[j][i], 3);
-          lcd_print(2, 14, i, 3);
-		  _delay_ms(1000);			
- 		  send(store[j][i]);
-		 }
-        }
-	}
-
-sei();//enables global interrupt
-
-}
-/*
-* Default value stored in the array is 999.
+ lcd_print(1, 1, count, 3);
+ if (read == 1)
+ {
+  //sensor_data_interpretation();
+  send(converttomm_41sk(SHARP_1));
+  send(Left_white_line);
+  send(Center_white_line);
+  send(Right_white_line);
+  count++;
+ }   
+} 
+/*Function To Initialize UART0
+* wireless serial communication using xbee module
+* desired baud rate:9600
+* actual baud rate:9600 (error 0.0%)
+* char size: 8 bit
+* parity: Disabled
 */
-void store_init()
+void uart0_init(void)
 {
-  
-		for (int i = 0 ; i < 10 ; i++)
-		{
-         for (int j = 0 ; j < 4 ; j++)
-		 {			
- 		  store[j][i]=999;
-		 }
-        }
+ UCSR0B = 0x00; //disable while setting baud rate
+ UCSR0A = 0x00;
+ UCSR0C = 0x06;
+ UBRR0L = 0x5F; //set baud rate lo
+ UBRR0H = 0x00; //set baud rate hi
+ UCSR0B = 0x98;
 }
 
 
@@ -480,8 +384,6 @@ void left_degrees(unsigned int Degrees)
  angle_rotate(Degrees);
 }
 
-
-
 void right_degrees(unsigned int Degrees)
 {
 // 88 pulses for 360 degrees rotation 4.090 degrees per count
@@ -522,6 +424,34 @@ void soft_right_2_degrees(unsigned int Degrees)
  angle_rotate(Degrees);
 }
 
+void timer5_init()
+{
+	TCCR5B = 0x00;	//Stop
+	TCNT5H = 0xFF;	//Counter higher 8-bit value to which OCR5xH value is compared with
+	TCNT5L = 0x01;	//Counter lower 8-bit value to which OCR5xH value is compared with
+	OCR5AH = 0x00;	//Output compare register high value for Left Motor
+	OCR5AL = 0xFF;	//Output compare register low value for Left Motor
+	OCR5BH = 0x00;	//Output compare register high value for Right Motor
+	OCR5BL = 0xFF;	//Output compare register low value for Right Motor
+	OCR5CH = 0x00;	//Output compare register high value for Motor C1
+	OCR5CL = 0xFF;	//Output compare register low value for Motor C1
+	TCCR5A = 0xA9;	/*{COM5A1=1, COM5A0=0; COM5B1=1, COM5B0=0; COM5C1=1 COM5C0=0}
+ 					  For Overriding normal port functionality to OCRnA outputs.
+				  	  {WGM51=0, WGM50=1} Along With WGM52 in TCCR5B for Selecting FAST PWM 8-bit Mode*/
+	
+	TCCR5B = 0x0B;	//WGM12=1; CS12=0, CS11=1, CS10=1 (Prescaler=64)
+}
+
+
+//Function for velocity control
+void velocity (unsigned char left_motor, unsigned char right_motor)
+{
+	cli();
+	OCR5AL = (unsigned char)left_motor;
+	OCR5BL = (unsigned char)right_motor;
+	sei();
+}
+
 //Function to initialize all the devices
 void init_devices()
 {
@@ -531,8 +461,8 @@ void init_devices()
  right_position_encoder_interrupt_init();
  timer4_init();
  adc_init();
- store_init();
- uart2_init();
+ timer5_init();
+ uart0_init(); //Initialize UART0 for serial communication
  TIMSK4 = 0x01;
  sei();   // Enables the global interrupt 
 }
@@ -548,22 +478,48 @@ int main(void)
 	lcd_cursor(1,5);
 	lcd_string("HI");
 	lcd_print(2,1,read,3);
-    forward();
-	while(count <= 6);
+	while(1)
+	{ 
+	    sensor_data_interpretation();
+
+		flag=0;
+		
+
+		if(Center_white_line<0x28)
+		{
+			flag=1;
+			forward();
+			velocity(150,150);
+		}
+
+		if((Left_white_line>0x28) && (flag==0))
+		{
+			flag=1;
+			forward();
+			velocity(130,50);
+		}
+
+		if((Right_white_line>0x28) && (flag==0))
+		{
+			flag=1;
+			forward();
+			velocity(50,130);
+		}
+
+		if(Center_white_line>0x28 && Left_white_line>0x28 && Right_white_line>0x28)
+		{
+			forward();
+			velocity(0,0);
+		}
+		if(count>=20)
+		 break;
+	}
 	stop();
 	read = 0;
 	TIMSK4 = 0x00;
 	TCCR4A = 0x00; 
 	TCCR4C = 0x00;
  	TCCR4B = 0x00;
-	lcd_init();
-	//Printing the stored value on lcd after the count value is reached 6.
-	lcd_print(1,1 , store[0][0], 3);
-	lcd_print(1,5 , store[0][1], 3);
-	lcd_print(1,9 , store[0][2], 3);
-	lcd_print(1,13 , store[0][3], 3);
-	lcd_print(2,1 , store[0][4], 3);
-	lcd_print(2,5 , store[0][5], 3);
 	while(1);
 	 
 	

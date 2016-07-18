@@ -1,107 +1,35 @@
-/********************************************************************************
- Written by: Vinod Desai, NEX Robotics Pvt. Ltd.
- Edited by: Sachitanand Malewar, NEX Robotics Pvt. Ltd.
- AVR Studio Version 4.17, Build 666
+/*********************************************************************************************************************
+* This experiment demonstrates state collection in parallel with a random user program.
+* Through this program we are collecting the value of 1 sharp sensor & 3 white line sensor.
+* Timer 4 interrupt is used to collect the state after every 1 seconds.
+* If the difference between previous data & data to be stored is less than 5 then previous value is updated only,
+  in this way it saves some space.
 
- Date: 26th December 2010
-
- This experiment demonstrates use of position encoders.
-
- Concepts covered: External Interrupts, Position control
- 
- Microcontroller pins used:
- PORTA3 to PORTA0: Robot direction control
- PL3, PL4: Robot velocity control. Currently set to 1 as PWM is not used
- PE4 (INT4): External interrupt for left motor position encoder 
- PE5 (INT5): External interrupt for the right position encoder
-
- Note: 
- 
- 1. Make sure that in the configuration options following settings are 
- 	done for proper operation of the code
-
- 	Microcontroller: atmega2560
-    Frequency: 14745600
- 	Optimization: -O0  (For more information read section: Selecting proper optimization 
- 					options below figure 2.22 in the Software Manual)
-
- 2.	It is observed that external interrupts does not work with the optimization level -Os
-
- 3. Auxiliary power can supply current up to 1 Ampere while Battery can supply current up to 
- 	2 Ampere. When both motors of the robot changes direction suddenly without stopping, 
-	it produces large current surge. When robot is powered by Auxiliary power which can supply
-	only 1 Ampere of current, sudden direction change in both the motors will cause current 
-	surge which can reset the microcontroller because of sudden fall in voltage. 
-	It is a good practice to stop the motors for at least 0.5seconds before changing 
-	the direction. This will also increase the useable time of the fully charged battery.
-	the life of the motor.
-
-*********************************************************************************/
-
-/********************************************************************************
-
-   Copyright (c) 2010, NEX Robotics Pvt. Ltd.                       -*- c -*-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions are met:
-
-   * Redistributions of source code must retain the above copyright
-     notice, this list of conditions and the following disclaimer.
-
-   * Redistributions in binary form must reproduce the above copyright
-     notice, this list of conditions and the following disclaimer in
-     the documentation and/or other materials provided with the
-     distribution.
-
-   * Neither the name of the copyright holders nor the names of
-     contributors may be used to endorse or promote products derived
-     from this software without specific prior written permission.
-
-   * Source code can be used for academic purpose. 
-	 For commercial use permission form the author needs to be taken.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  POSSIBILITY OF SUCH DAMAGE. 
-
-  Software released under Creative Commence cc by-nc-sa licence.
-  For legal information refer to: 
-  http://creativecommons.org/licenses/by-nc-sa/3.0/legalcode
-
-********************************************************************************/
-
+*************************************************************************************************************************/
+#define __OPTIMIZE__ -O0
+#define F_CPU 14745600
+//Header files 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <math.h>
-
-
-#include "lcd.c"
+#include "lcd.h"
 
 int read = 1;
 unsigned char SHARP_1;
 unsigned char dt;
-char a[3];
+char a[3];                           //array having size 3
 unsigned char flag = 0;
 unsigned char data;
 unsigned char ADC_flag;
 unsigned char ADC_Conversion(unsigned char);
 unsigned char ADC_Value;
-unsigned char Left_white_line = 0;
-unsigned char Center_white_line = 0;
-unsigned char Right_white_line = 0;
-unsigned long int ShaftCountLeft = 0; //to keep track of left position encoder 
+unsigned char Left_white_line = 0;     //variable to store left white line sensor value
+unsigned char Center_white_line = 0;   //variable to store center white line sensor value
+unsigned char Right_white_line = 0;    //variable to store right white line sensor value
+unsigned long int ShaftCountLeft = 0;  //to keep track of left position encoder 
 unsigned long int ShaftCountRight = 0; //to keep track of right position encoder
-unsigned int Degrees; //to accept angle in degrees for turning
+unsigned int Degrees;                 //to accept angle in degrees for turning
 
 //Function to configure ports to enable robot's motion
 void motion_pin_config (void) 
@@ -153,8 +81,6 @@ void port_init()
 }
 
 
-
-
 void left_position_encoder_interrupt_init (void) //Interrupt 4 enable
 {
  cli(); //Clears the global interrupt
@@ -190,10 +116,10 @@ void motion_set (unsigned char Direction)
 {
  unsigned char PortARestore = 0;
 
- Direction &= 0x0F; 		// removing upper nibbel for the protection
+ Direction &= 0x0F; 		// removing upper nibble for the protection
  PortARestore = PORTA; 		// reading the PORTA original status
- PortARestore &= 0xF0; 		// making lower direction nibbel to 0
- PortARestore |= Direction; // adding lower nibbel for forward command and restoring the PORTA status
+ PortARestore &= 0xF0; 		// making lower direction nibble to 0
+ PortARestore |= Direction; // adding lower nibble for forward command and restoring the PORTA status
  PORTA = PortARestore; 		// executing the command
 }
 
@@ -251,9 +177,9 @@ void adc_init(void)
 	ADCSRB = 0x00;		//MUX5 = 0
 	ADMUX = 0x20;		//Vref=5V external --- ADLAR=1 --- MUX4:0 = 0000
 	ACSR = 0x80;
-	ADCSRA = 0x86;		//ADEN=1 --- ADIE=1 --- ADPS2:0 = 1 1 0
+	ADCSRA = 0x86;		//ADEN=1 --- ADIE=0 --- ADPS2:0 = 1 1 0
 }
-
+//This Function accepts the Channel Number and returns the corresponding digital Value
 unsigned char ADC_Conversion(unsigned char ch)
 {
 unsigned char a;
@@ -295,7 +221,7 @@ void angle_rotate(unsigned int Degrees)
 void sensor_data_interpretation(void) //ld, fd, rd, light int
 {
 
- SHARP_1 = ADC_Conversion(9);
+ SHARP_1 = ADC_Conversion(9);           // Getting data of sharp sensor 1
  Left_white_line = ADC_Conversion(3);	//Getting data of Left WL Sensor
  Center_white_line = ADC_Conversion(2);	//Getting data of Center WL Sensor
  Right_white_line = ADC_Conversion(1);	//Getting data of Right WL Sensor
@@ -303,7 +229,7 @@ void sensor_data_interpretation(void) //ld, fd, rd, light int
 }
 
 
-
+//function used for distance calculation of sharp sensor
 unsigned int converttomm(unsigned int a )
 {
   double b;
@@ -317,7 +243,7 @@ unsigned int converttomm(unsigned int a )
 
 }
 
-
+//function used for distance calculation of sharp sensor of 41sk type
 unsigned int converttomm_41sk(unsigned int a)
 {
   double b;
@@ -329,22 +255,23 @@ unsigned int converttomm_41sk(unsigned int a)
   b = (int)b; 
   return b;
 }
-
+//-------------------------------------------------------------------------------------
 //TIMER4 initialize - prescale:1024
 // WGM: 0) Normal, TOP=0xFFFF
 // desired value: 1Hz
 // actual value:  1.000Hz (0.0%)
+//timer will overflow after 1 seconds
 void timer4_init(void)
 {
  TCCR4B = 0x00; //stop
  TCNT4H = 0x1F; //Counter higher 8 bit value
  TCNT4L = 0x01; //Counter lower 8 bit value
- OCR4AH = 0x00; //Output Compair Register (OCR)- Not used
- OCR4AL = 0x00; //Output Compair Register (OCR)- Not used
- OCR4BH = 0x00; //Output Compair Register (OCR)- Not used
- OCR4BL = 0x00; //Output Compair Register (OCR)- Not used
- OCR4CH = 0x00; //Output Compair Register (OCR)- Not used
- OCR4CL = 0x00; //Output Compair Register (OCR)- Not used
+ OCR4AH = 0x00; //Output Compare Register (OCR)- Not used
+ OCR4AL = 0x00; //Output Compare Register (OCR)- Not used
+ OCR4BH = 0x00; //Output Compare Register (OCR)- Not used
+ OCR4BL = 0x00; //Output Compare Register (OCR)- Not used
+ OCR4CH = 0x00; //Output Compare Register (OCR)- Not used
+ OCR4CL = 0x00; //Output Compare Register (OCR)- Not used
  ICR4H  = 0x00; //Input Capture Register (ICR)- Not used
  ICR4L  = 0x00; //Input Capture Register (ICR)- Not used
  TCCR4A = 0x00; 
@@ -353,13 +280,16 @@ void timer4_init(void)
 }
 
 
-int	 store[4][10]; 
+int	 store[4][10]; //array having 4 row and 10 column
 
 int count = 0;
-//This ISR can be used to schedule events like refreshing ADC data, LCD data
+
+//This ISR can be used to schedule events like refreshing ADC data, LCD data.
+//Interrupt is called after ever 1 second when Timer4 has overflowed.
+
 ISR(TIMER4_OVF_vect)
 {
- lcd_print(1, 1, count, 3);
+ lcd_print(1, 1, count, 3);//printing of count value on lcd
  TCNT4H = 0x1F; //reload counter high value
  TCNT4L = 0x01; //reload counter low value
  if (read == 1)
@@ -373,25 +303,26 @@ ISR(TIMER4_OVF_vect)
     {
     // sensor_data_interpretation();
      lcd_print(1, 10, converttomm_41sk(SHARP_1), 3);
-     store[i][count]= converttomm_41sk(SHARP_1);
+     store[i][count]= converttomm_41sk(SHARP_1);//storing sharp sensor value in array.
     }
     if(i == 1 )
     {
      //sensor_data_interpretation();
      lcd_print(1, 10, Center_white_line, 3);
-     store[i][count]=(int) Center_white_line;
+     store[i][count]=(int) Center_white_line;//storing center white line sensor value in array.
     }
     if(i == 2 )
     {
 	 //sensor_data_interpretation();
      lcd_print(1, 10, Left_white_line, 3);
-     store[i][count]=(int) Left_white_line;
+     store[i][count]=(int) Left_white_line;//storing left white line sensor value in array.
     }
     if(i == 3 )
     {
      //sensor_data_interpretation();
      lcd_print(1, 10, Right_white_line, 3);
-     store[i][count]=(int) Right_white_line;
+     store[i][count]=(int) Right_white_line;//storing right white line sensor value in array.
+		 
     }
    }
   }
@@ -399,24 +330,28 @@ ISR(TIMER4_OVF_vect)
   {
    for(int i = 0; i <4; i++)
    {
+	    //storing the value only when the difference between previous value & next value is more than 5
     if(i == 0 && ( (store[i][count-1]+5)<converttomm_41sk(SHARP_1) || (store[i][count-1]-5)>converttomm_41sk(SHARP_1) ))
     {
 	 //sensor_data_interpretation();
      lcd_print(1, 10, converttomm_41sk(SHARP_1), 3);
      store[i][count]= converttomm_41sk(SHARP_1);
     }
+	 //storing the value only when the difference between previous value & next value is more than 5
     if(i == 1 && ( (store[i][count-1]+5)<(Center_white_line-5) || (store[i][count-1]-5)>Center_white_line ))
     {
      //sensor_data_interpretation();
      lcd_print(1, 10, Center_white_line, 3);
      store[i][count]=(int) Center_white_line;
     }
+	 //storing the value only when the difference between previous value & next value is more than 5
     if(i == 2 && ((store[i][count-1]+5)<(Left_white_line-5) || (store[i][count-1]-5)>Left_white_line))
     {
      //sensor_data_interpretation();
      lcd_print(1, 10, Left_white_line, 3);
      store[i][count]=(int) Left_white_line;
     }
+	 //storing the value only when the difference between previous value & next value is more than 5
     if(i == 3 && ((store[i][count-1]+5)<(Right_white_line-5) || (store[i][count-1]-5)>Right_white_line))
     {
      //sensor_data_interpretation();
@@ -429,7 +364,7 @@ ISR(TIMER4_OVF_vect)
  }   
 } 
 
-
+//Initializing of USB serial communication
 void uart2_init(void)
 {
  UCSR2B = 0x00; //disable while setting baud rate
@@ -440,7 +375,9 @@ void uart2_init(void)
  UCSR2B = 0x98;
 }
 
-
+/***Function to convert integer into digits and send them as character.
+* delays are given so that the transmission of every character is accurate.
+*/
 void send ( int n)
 { 
   int z = 0;
@@ -453,20 +390,21 @@ void send ( int n)
     a[z++] = (char)(c % 10); // assign the last digit
     c /= 10; // "right shift" the number
  }
+ _delay_ms(10);                                                                  
+ UDR2 = a[2] + 48;       //sending first digit       
+ UDR2 = a[1] + 48;       //sending second digit                                                                                          
  _delay_ms(10);
- UDR2 = a[2] + 48;
- UDR2 = a[1] + 48;
- _delay_ms(10);
- UDR2 = a[0] + 48;
- UDR2 = 32;
+ UDR2 = a[0] + 48;      //sending third digit
+ UDR2 = 32;             //To give space between two integer
 }
+/*
+   Using this function stored data in firebird V is collected to serial terminal when 5 is sent from serial terminal.
 
+*/
 SIGNAL(SIG_USART2_RECV) 		// ISR for receive complete interrupt
 {
-    cli();
-
-	data = UDR2; 				//making copy of data from UDR1 in 'data' variable				//echo data back to PC
-
+    cli();                    //clears the global interrupt
+	data = UDR2; 				//making copy of data from UDR2 in 'data' variable
 		if(data == 0x35) //ASCII value of 5
 		{
 		  lcd_init();
@@ -476,6 +414,7 @@ SIGNAL(SIG_USART2_RECV) 		// ISR for receive complete interrupt
 		{
          for (int j = 0 ; j < 4 ; j++)
 		 {
+			 //Printing the stored value in lcd & sending it to laptop via USB.
 		  lcd_print(2, 10, store[j][i], 3);
           lcd_print(2, 14, i, 3);
 			_delay_ms(1000);			
@@ -483,11 +422,11 @@ SIGNAL(SIG_USART2_RECV) 		// ISR for receive complete interrupt
 		 }
         }
 	}
-
-sei();
-
+sei();//enabling global interrupts
 }
-
+/*
+* Default value stored in the array is 999.
+*/
 void store_init()
 {
   
@@ -500,7 +439,7 @@ void store_init()
         }
 }
 
-
+//-----------------------------------------------------------------------------------------------
 //Function used for moving robot forward by specified distance
 
 void linear_distance_mm(unsigned int DistanceInMM)
@@ -508,7 +447,7 @@ void linear_distance_mm(unsigned int DistanceInMM)
  float ReqdShaftCount = 0;
  unsigned long int ReqdShaftCountInt = 0;
 
- ReqdShaftCount = DistanceInMM / 5.338; // division by resolution to get shaft count
+ ReqdShaftCount = DistanceInMM / 5.338;               // division by resolution to get shaft count
  ReqdShaftCountInt = (unsigned long int) ReqdShaftCount;
   
  ShaftCountRight = 0;
@@ -521,9 +460,6 @@ void linear_distance_mm(unsigned int DistanceInMM)
  } 
  stop(); //Stop robot
 }
-
-
-
 void forward_mm(unsigned int DistanceInMM)
 {
  forward();
@@ -543,15 +479,12 @@ void left_degrees(unsigned int Degrees)
  angle_rotate(Degrees);
 }
 
-
-
 void right_degrees(unsigned int Degrees)
 {
 // 88 pulses for 360 degrees rotation 4.090 degrees per count
  right(); //Turn right
  angle_rotate(Degrees);
 }
-	
 
 void soft_left_degrees(unsigned int Degrees)
 {
@@ -616,7 +549,7 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
 //Function to initialize all the devices
 void init_devices()
 {
- cli(); //Clears the global interrupt
+ cli();        //Clears the global interrupt
  port_init();  //Initializes all the ports
  left_position_encoder_interrupt_init();
  right_position_encoder_interrupt_init();
@@ -628,7 +561,6 @@ void init_devices()
  TIMSK4 = 0x01;
  sei();   // Enables the global interrupt 
 }
-
 
 //Main Function
 
@@ -646,13 +578,10 @@ int main(void)
 	back_mm(100);
 	soft_right_degrees(90);
 	soft_left_degrees(90);
-	stop();
+	stop();                        //stop the bot
 	read = 0;
-	TIMSK4 = 0x00;
-	TCCR4A = 0x00; 
-	TCCR4C = 0x00;
- 	TCCR4B = 0x00;
 	lcd_init();
+	//Printing the stored value on lcd after the run is complete
 	lcd_print(1,1 , store[0][0], 3);
 	lcd_print(1,5 , store[0][1], 3);
 	lcd_print(1,9 , store[0][2], 3);
@@ -660,8 +589,6 @@ int main(void)
 	lcd_print(2,1 , store[0][4], 3);
 	lcd_print(2,5 , store[0][5], 3);
 	while(1);
-	 
-	
 }
 	
 

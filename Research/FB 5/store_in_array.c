@@ -1,38 +1,29 @@
-/*********************************************************************************************************************
-* Objective :  To save the space by updating the previous value when there is not much variation in reading
-* Description: In this program  if the difference between previous data & data to be stored is less than 5 then previous value is updated only,
-               in this way it saves some space.
-* Data is send through USB serial communication after every 1 second.			   
-* Now Timer 4 interrupt is used to collect the state after every 1 seconds.
-* Bug: sometimes correct data is not received at receiver side i.e. some digits of an integer are missing.
 
-*************************************************************************************************************************/
-
-#define __OPTIMIZE__ -O0
-#define F_CPU 14745600
-//header file
+/**********************************************************************************************************************
+*Description:  Storage of state data in 2-D array.
+*Objective:    Trying to store the sharp sensor1 value in bot and send it to laptop/pc through USB serial communication.
+*Solution:     We used 2-D array to store the fixed number of sensor values.
+*Bug     :     we have constrained of space in bot so we can't store more data in bot.
+**************************************************************************************************************************/
+//Header files
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <math.h>
 
-
 #include "lcd.h"
 
 int read = 1;
-unsigned char SHARP_1;
+unsigned char SHARP_1;//variable which contains th value of sharp sensor.
 unsigned char dt;
 char a[3];  //array having size 3
 unsigned char data;
 unsigned char ADC_flag;
 unsigned char ADC_Conversion(unsigned char);
 unsigned char ADC_Value;
-unsigned char Left_white_line = 0;     //variable to store left white line sensor value
-unsigned char Center_white_line = 0;   //variable to store center white line sensor value
-unsigned char Right_white_line = 0;    //variable to store right white line sensor value
 unsigned long int ShaftCountLeft = 0; //to keep track of left position encoder 
 unsigned long int ShaftCountRight = 0; //to keep track of right position encoder
-unsigned int Degrees; //to accept angle in degrees for turning
+unsigned int Degrees;                  //to accept angle in degrees for turning
 
 //Function to configure ports to enable robot's motion
 void motion_pin_config (void) 
@@ -48,8 +39,6 @@ void lcd_port_config (void)
  DDRC = DDRC | 0xF7;    //all the LCD pin's direction set as output
  PORTC = PORTC & 0x80;  // all the LCD pins are set to logic 0 except PORTC 7
 }
-
-
 
 void adc_pin_config (void)
 {
@@ -184,7 +173,7 @@ void adc_init(void)
 	ACSR = 0x80;
 	ADCSRA = 0x86;		//ADEN=1 --- ADIE=1 --- ADPS2:0 = 1 1 0
 }
-
+//This Function accepts the Channel Number and returns the corresponding digital Value
 unsigned char ADC_Conversion(unsigned char ch)
 {
 unsigned char a;
@@ -227,13 +216,17 @@ void sensor_data_interpretation(void) //ld, fd, rd, light int
 {
 
  SHARP_1 = ADC_Conversion(9);
- Left_white_line = ADC_Conversion(3);	//Getting data of Left WL Sensor
- Center_white_line = ADC_Conversion(2);	//Getting data of Center WL Sensor
- Right_white_line = ADC_Conversion(1);	//Getting data of Right WL Sensor
  
 }
 
-//function used for distance calculation of sharp sensor
+/*
+* Function Name:	 converttomm_41sk
+* Input:			Digital value of sharp sensor values
+* Output:           Distance in mm
+* Example Call:		converttomm_41sk(_conv_adc(9));
+*
+*/
+
 unsigned int converttomm(unsigned int a )
 {
   double b;
@@ -247,7 +240,7 @@ unsigned int converttomm(unsigned int a )
 
 }
 
-//function used for distance calculation of sharp sensor of 41sk type
+
 unsigned int converttomm_41sk(unsigned int a)
 {
   double b;
@@ -259,23 +252,22 @@ unsigned int converttomm_41sk(unsigned int a)
   b = (int)b; 
   return b;
 }
-//--------------------------------------------------------
+
 //TIMER4 initialize - prescale:1024
 // WGM: 0) Normal, TOP=0xFFFF
 // desired value: 1Hz
 // actual value:  1.000Hz (0.0%)
-//timer4 interrupt will overflow after 1 second.
 void timer4_init(void)
 {
  TCCR4B = 0x00; //stop
  TCNT4H = 0x1F; //Counter higher 8 bit value
  TCNT4L = 0x01; //Counter lower 8 bit value
- OCR4AH = 0x00; //Output compare Register (OCR)- Not used
- OCR4AL = 0x00; //Output compare Register (OCR)- Not used
- OCR4BH = 0x00; //Output Compare Register (OCR)- Not used
- OCR4BL = 0x00; //Output Compare Register (OCR)- Not used
- OCR4CH = 0x00; //Output Compare Register (OCR)- Not used
- OCR4CL = 0x00; //Output Compare Register (OCR)- Not used
+ OCR4AH = 0x00; //Output Compair Register (OCR)- Not used
+ OCR4AL = 0x00; //Output Compair Register (OCR)- Not used
+ OCR4BH = 0x00; //Output Compair Register (OCR)- Not used
+ OCR4BL = 0x00; //Output Compair Register (OCR)- Not used
+ OCR4CH = 0x00; //Output Compair Register (OCR)- Not used
+ OCR4CL = 0x00; //Output Compair Register (OCR)- Not used
  ICR4H  = 0x00; //Input Capture Register (ICR)- Not used
  ICR4L  = 0x00; //Input Capture Register (ICR)- Not used
  TCCR4A = 0x00; 
@@ -283,88 +275,27 @@ void timer4_init(void)
  TCCR4B = 0x04; //start Timer
 }
 
-int	 store[4][10]; //2-d array having 4 rows & 10 column.
+
+int	 store[1][10]; //2-D array having 1 column and 10 rows.
+
 int count = 0;
-//This ISR can be used to schedule events like refreshing ADC data, LCD data.
-//This interrupt service routine will be called after every 1 second
+//This ISR can be used to schedule events like refreshing ADC data, LCD data
 ISR(TIMER4_OVF_vect)
 {
- lcd_print(1, 1, count, 3);
+	cli();
  TCNT4H = 0x1F; //reload counter high value
  TCNT4L = 0x01; //reload counter low value
- if (read == 1)
+ if (read == 1) //
  {
-  //sensor_data_interpretation();
-  if(count == 0)
-  {  
-   for(int i = 0; i <4; i++)
-   {
-    if(i == 0 )
-    {
-    // sensor_data_interpretation();
-     lcd_print(1, 10, converttomm_41sk(SHARP_1), 3);
-     store[i][count]= converttomm_41sk(SHARP_1); //storing sharp sensor value in array.
-    }
-    if(i == 1 )
-    {
-     //sensor_data_interpretation();
-     lcd_print(1, 10, Center_white_line, 3);
-     store[i][count]=(int) Center_white_line; //storing center white line sensor value in array.
-    }
-    if(i == 2 )
-    {
-	 //sensor_data_interpretation();
-     lcd_print(1, 10, Left_white_line, 3);
-     store[i][count]=(int) Left_white_line;//storing left white line sensor value in array.
-    }
-    if(i == 3 )
-    {
-     //sensor_data_interpretation();
-     lcd_print(1, 10, Right_white_line, 3);
-     store[i][count]=(int) Right_white_line;//storing right white line sensor value in array.
-    }
-   }
-  }
-  if (count >0)
-  {//
-   for(int i = 0; i <4; i++)
-   {
-	   //storing the value only when the difference between previous value & next value is more than 5
-    if(i == 0 && ( (store[i][count-1]+5)<converttomm_41sk(SHARP_1) || (store[i][count-1]-5)>converttomm_41sk(SHARP_1) ))
-    {
-	 //sensor_data_interpretation();
-     lcd_print(1, 10, converttomm_41sk(SHARP_1), 3);
-     store[i][count]= converttomm_41sk(SHARP_1);
-    }
-	//storing the value only when the difference between previous value & next value is more than 5
-    if(i == 1 && ( (store[i][count-1]+5)<(Center_white_line-5) || (store[i][count-1]-5)>Center_white_line ))
-    {
-     //sensor_data_interpretation();
-     lcd_print(1, 10, Center_white_line, 3);
-     store[i][count]=(int) Center_white_line;
-    }
-	//storing the value only when the difference between previous value & next value is more than 5
-    if(i == 2 && ((store[i][count-1]+5)<(Left_white_line-5) || (store[i][count-1]-5)>Left_white_line))
-    {
-     //sensor_data_interpretation();
-     lcd_print(1, 10, Left_white_line, 3);
-     store[i][count]=(int) Left_white_line;
-    }
-	//storing the value only when the difference between previous value & next value is more than 5
-    if(i == 3 && ((store[i][count-1]+5)<(Right_white_line-5) || (store[i][count-1]-5)>Right_white_line))
-    {
-     //sensor_data_interpretation();
-     lcd_print(1, 10, Right_white_line, 3);
-     store[i][count]=(int) Right_white_line;
-    }
-   }
-  }
-  count++;
+ 	lcd_print(1, 1, count, 3);                      //printing the value of count on lcd
+    sensor_data_interpretation();
+    lcd_print(1, 10, converttomm_41sk(SHARP_1), 3);//printing the value of sharp sensor1 on lcd
+    store[0][count]=converttomm_41sk(SHARP_1);   //storing the value of sharp sensor 1 in array
+    count++;
  }   
-
+ sei();
 } 
-
-//Initializing USB serial communication 
+// Initialization of USB serial communication
 void uart2_init(void)
 {
  UCSR2B = 0x00; //disable while setting baud rate
@@ -374,7 +305,7 @@ void uart2_init(void)
  UBRR2H = 0x00; //set baud rate hi
  UCSR2B = 0x98;
 }
-
+//-----------------------------------------------------------------
 /***Function to convert integer into digits and send them as character********/
 void send ( int n)
 { 
@@ -386,60 +317,40 @@ void send ( int n)
   while (c) 
  { // loop till there's nothing left
     a[z++] = (char)(c % 10); // assign the last digit
-    c /= 10; // "right shift" the number
+    c /= 10;                // "right shift" the number
  }
  _delay_ms(10);
- UDR2 = a[2] + 48;   //sending first digit
- UDR2 = a[1] + 48;   //sending second digit
- _delay_ms(10);
- UDR2 = a[0] + 48;   //sending third digit
- UDR2 = 32;          //To give space between two integer
+ UDR2 = a[2] + 48;       //sending first digit
+ UDR2 = a[1] + 48;       //sending the second digit
+ _delay_ms(10);          //delay is given so that one digit is transmitted properly before next to come.
+ UDR2 = a[0] + 48;      //sending the third digit
+ UDR2 = 32;             // to give the space between two integers.
 }
+//--------------------------------------------------------------------------
+// ISR for receive complete interrupt
 /*
    Using this function stored data in firebird V is collected to serial terminal when 5 is sent from serial terminal.
 
 */
-SIGNAL(SIG_USART2_RECV) 		// ISR for receive complete interrupt
+SIGNAL(SIG_USART2_RECV) 		
 {
-    cli();
-
-	data = UDR2; 				//making copy of data from UDR2 in 'data' variable
+        cli();//clears global interrupt
+         
+	    data = UDR2; //making copy of data from UDR2 in 'data' variable
 		if(data == 0x35) //ASCII value of 5
 		{
+		  
 		  lcd_init();
-        //Printing the stored value in lcd & sending it to laptop via USB.
-		for (int i = 0 ; i < count ; i++)
+		for (int  i = 0 ; i < count ; i++)
 		{
-         for (int j = 0 ; j < 4 ; j++)
-		 {
-			 //Printing the stored value in lcd & sending it to laptop via USB.
-		  lcd_print(2, 10, store[j][i], 3);
+          lcd_print(2, 10, store[0][i], 3); //printing the stored value on lcd
           lcd_print(2, 14, i, 3);
-		  _delay_ms(1000);			
- 		  send(store[j][i]);
-		 }
+		  _delay_ms(1000);
+ 		  send(store[0][i]);   //sending the stored value to pc via USB serial communication.
         }
-	}
-
-sei();//enables global interrupt
-
+     	}
+       sei();//Enabling global interrupt.
 }
-/*
-* Default value stored in the array is 999.
-*/
-void store_init()
-{
-  
-		for (int i = 0 ; i < 10 ; i++)
-		{
-         for (int j = 0 ; j < 4 ; j++)
-		 {			
- 		  store[j][i]=999;
-		 }
-        }
-}
-
-
 //Function used for moving robot forward by specified distance
 
 void linear_distance_mm(unsigned int DistanceInMM)
@@ -480,8 +391,6 @@ void left_degrees(unsigned int Degrees)
  angle_rotate(Degrees);
 }
 
-
-
 void right_degrees(unsigned int Degrees)
 {
 // 88 pulses for 360 degrees rotation 4.090 degrees per count
@@ -489,7 +398,6 @@ void right_degrees(unsigned int Degrees)
  angle_rotate(Degrees);
 }
 	
-
 void soft_left_degrees(unsigned int Degrees)
 {
  // 176 pulses for 360 degrees rotation 2.045 degrees per count
@@ -531,7 +439,6 @@ void init_devices()
  right_position_encoder_interrupt_init();
  timer4_init();
  adc_init();
- store_init();
  uart2_init();
  TIMSK4 = 0x01;
  sei();   // Enables the global interrupt 
@@ -549,16 +456,16 @@ int main(void)
 	lcd_string("HI");
 	lcd_print(2,1,read,3);
     forward();
-	while(count <= 6);
-	stop();
+	while(count <= 6);  
+	stop();                 //bot will stop when readings of the sensor will be taken upto 6 times.
 	read = 0;
 	TIMSK4 = 0x00;
 	TCCR4A = 0x00; 
 	TCCR4C = 0x00;
  	TCCR4B = 0x00;
-	lcd_init();
-	//Printing the stored value on lcd after the count value is reached 6.
-	lcd_print(1,1 , store[0][0], 3);
+	lcd_init();            //initialization of lcd
+	//printing of stored value on lcd after the bot will stop
+	lcd_print(1,1 , store[0][0], 3);  
 	lcd_print(1,5 , store[0][1], 3);
 	lcd_print(1,9 , store[0][2], 3);
 	lcd_print(1,13 , store[0][3], 3);

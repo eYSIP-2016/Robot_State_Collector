@@ -1,33 +1,33 @@
-/*
-Communication was achieved with the help of x-bee b/w laptop and firebird V..
-X-bee was set on a baud rate of 9600. But if we set the baud rate to 115200 there seems to be a problem.
+/*********************************************************************************************************************
+* Objective :  Implementing wireless serial communication via Xbee module.
+* Description: Through this program we are sending the sensor values of robot (while a random program is running) to  
+               laptop via wireless serial communication after every 1 second using xbee module.
+			   Now we are not storing the state value in robot,we are directly sending it to the laptop via xbee module.
+			   It solved our state constraint problem.
+* Timer 4 interrupt is used to collect the state after every 1 seconds.
+* Bug: sometimes correct data is not received at receiver side i.e. some digits of an integer are missing.
 
-Random code that utilises interrupts. Checking if using timer to send data interfers with the interrupts.
-
-Delay is being used to avoid overlapping of data. it occurs as the first transmission is not complete and next transmission starts to take place. 
-
-*/
+*************************************************************************************************************************/
+//Header files 
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <math.h>
-
-
-#include "lcd.c"
+#include "lcd.h"
 
 int read = 1;
-unsigned char SHARP_1;
+unsigned char SHARP_1; //variable to store sharp sensor value
 unsigned char dt;
-char a[3];
+char a[3];  //array having size 3
 unsigned char flag = 0;
 unsigned char data;
 unsigned char ADC_flag;
 unsigned char ADC_Conversion(unsigned char);
 unsigned char ADC_Value;
-unsigned char Left_white_line = 0;
-unsigned char Center_white_line = 0;
-unsigned char Right_white_line = 0;
+unsigned char Left_white_line = 0;     //variable to store left white line sensor value
+unsigned char Center_white_line = 0;   //variable to store center white line sensor value
+unsigned char Right_white_line = 0;    //variable to store right white line sensor value
 unsigned long int ShaftCountLeft = 0; //to keep track of left position encoder 
 unsigned long int ShaftCountRight = 0; //to keep track of right position encoder
 unsigned int Degrees; //to accept angle in degrees for turning
@@ -46,8 +46,6 @@ void lcd_port_config (void)
  DDRC = DDRC | 0xF7;    //all the LCD pin's direction set as output
  PORTC = PORTC & 0x80;  // all the LCD pins are set to logic 0 except PORTC 7
 }
-
-
 
 void adc_pin_config (void)
 {
@@ -80,10 +78,6 @@ void port_init()
  right_encoder_pin_config(); //right encoder pin config	
  adc_pin_config();
 }
-
-
-
-
 void left_position_encoder_interrupt_init (void) //Interrupt 4 enable
 {
  cli(); //Clears the global interrupt
@@ -180,9 +174,9 @@ void adc_init(void)
 	ADCSRB = 0x00;		//MUX5 = 0
 	ADMUX = 0x20;		//Vref=5V external --- ADLAR=1 --- MUX4:0 = 0000
 	ACSR = 0x80;
-	ADCSRA = 0x86;		//ADEN=1 --- ADIE=1 --- ADPS2:0 = 1 1 0
+	ADCSRA = 0x86;		//ADEN=1 --- ADIE=0 --- ADPS2:0 = 1 1 0
 }
-
+//This Function accepts the Channel Number and returns the corresponding digital Value 
 unsigned char ADC_Conversion(unsigned char ch)
 {
 unsigned char a;
@@ -231,8 +225,7 @@ void sensor_data_interpretation(void) //ld, fd, rd, light int
  
 }
 
-
-
+//function used for distance calculation(in mm) of sharp sensor
 unsigned int converttomm(unsigned int a )
 {
   double b;
@@ -246,7 +239,7 @@ unsigned int converttomm(unsigned int a )
 
 }
 
-
+//function used for distance calculation(in mm) of 41sk type sharp sensor
 unsigned int converttomm_41sk(unsigned int a)
 {
   double b;
@@ -265,23 +258,25 @@ unsigned int converttomm_41sk(unsigned int a)
 // actual value:  1.000Hz (0.0%)
 void timer4_init(void)
 {
- TCCR4B = 0x00; //stop
- TCNT4H = 0x1F; //Counter higher 8 bit value
- TCNT4L = 0x01; //Counter lower 8 bit value
- OCR4AH = 0x00; //Output Compair Register (OCR)- Not used
- OCR4AL = 0x00; //Output Compair Register (OCR)- Not used
- OCR4BH = 0x00; //Output Compair Register (OCR)- Not used
- OCR4BL = 0x00; //Output Compair Register (OCR)- Not used
- OCR4CH = 0x00; //Output Compair Register (OCR)- Not used
- OCR4CL = 0x00; //Output Compair Register (OCR)- Not used
- ICR4H  = 0x00; //Input Capture Register (ICR)- Not used
- ICR4L  = 0x00; //Input Capture Register (ICR)- Not used
- TCCR4A = 0x00; 
- TCCR4C = 0x00;
- TCCR4B = 0x04; //start Timer
+	void timer4_init(void)
+	{
+		TCCR4B = 0x00; //stop
+		OCR4AH = 0x00; //Output Compare Register (OCR)- Not used
+		OCR4AL = 0x00; //Output Compare Register (OCR)- Not used
+		OCR4BH = 0x00; //Output Compare Register (OCR)- Not used
+		OCR4BL = 0x00; //Output Compare Register (OCR)- Not used
+		OCR4CH = 0x00; //Output Compare Register (OCR)- Not used
+		OCR4CL = 0x00; //Output Compare Register (OCR)- Not used
+		ICR4H  = 0x70; //Input Capture Register (ICR)- Not used
+		ICR4L  = 0x80; //Input Capture Register (ICR)- Not used
+		TCCR4C = 0x00;
+		TCCR4A = 0b00000010;
+		TCCR4B = 0b00011100; //start Timer
 }
 
-
+/***Function to convert integer into digits and send them as character.
+* delays are given so that the transmission of every character is accurate.
+*/
 void send ( int n)
 { 
   int z = 0;
@@ -295,18 +290,15 @@ void send ( int n)
     c /= 10; // "right shift" the number
  }
  _delay_ms(10);
- UDR0 = a[2] + 48;
- UDR0 = a[1] + 48;
- _delay_ms(10);
- UDR0 = a[0] + 48;
- UDR0 = 32;
+ UDR2 = a[2] + 48;   //sending first digit
+ UDR2 = a[1] + 48;   //sending second digit
+ _delay_ms(5);
+ UDR2 = a[0] + 48;  //sending third digit
+ UDR2 = 32;         //To give space between two integer
 }
-
-
-
-
 int count = 0;
-//This ISR can be used to schedule events like refreshing ADC data, LCD data
+//This ISR can be used to schedule events like refreshing ADC data, LCD data.
+//Interrupt is called after ever 1 second when Timer4 has overflowed.
 ISR(TIMER4_OVF_vect)
 {
  lcd_print(1, 1, count, 3);
@@ -315,6 +307,7 @@ ISR(TIMER4_OVF_vect)
  if (read == 1)
  {
   sensor_data_interpretation();
+  //sending sensors value to laptop via wireless serial communication
   send(converttomm_41sk(SHARP_1));
   send(Left_white_line);
   send(Center_white_line);
@@ -324,11 +317,13 @@ ISR(TIMER4_OVF_vect)
 } 
 
 
-//Function To Initialize UART0
-// desired baud rate:9600
-// actual baud rate:9600 (error 0.0%)
-// char size: 8 bit
-// parity: Disabled
+/*Function To Initialize UART0
+* wireless serial communication using xbee module
+* desired baud rate:9600
+* actual baud rate:9600 (error 0.0%)
+* char size: 8 bit
+* parity: Disabled
+*/
 void uart0_init(void)
 {
  UCSR0B = 0x00; //disable while setting baud rate
@@ -338,14 +333,6 @@ void uart0_init(void)
  UBRR0H = 0x00; //set baud rate hi
  UCSR0B = 0x98;
 }
-
-
-
-
-
-
-
-
 //Function used for moving robot forward by specified distance
 
 void linear_distance_mm(unsigned int DistanceInMM)
@@ -387,16 +374,12 @@ void left_degrees(unsigned int Degrees)
  left(); //Turn left
  angle_rotate(Degrees);
 }
-
-
-
 void right_degrees(unsigned int Degrees)
 {
 // 88 pulses for 360 degrees rotation 4.090 degrees per count
  right(); //Turn right
  angle_rotate(Degrees);
 }
-	
 
 void soft_left_degrees(unsigned int Degrees)
 {
@@ -469,15 +452,10 @@ void init_devices()
  adc_init();
  timer5_init();
  uart0_init();
- TIMSK4 = 0x01;
+ TIMSK4 = 0x01;//enables timer 4 interrupt
  sei();   // Enables the global interrupt 
 }
-
-
 //Main Function
-
-
-Random code that utilises. checking if using timer to send data interfers with the interrupts.
 
 int main(void)
 {
@@ -495,10 +473,6 @@ int main(void)
 	soft_left_degrees(90);
 	stop();
 	read = 0;
-	TIMSK4 = 0x00;
-	TCCR4A = 0x00; 
-	TCCR4C = 0x00;
- 	TCCR4B = 0x00;
 	while(1);
 	 
 	
