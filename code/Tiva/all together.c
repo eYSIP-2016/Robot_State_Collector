@@ -1,3 +1,11 @@
+/*
+
+This code was used to test all the components together. 
+All the port info. is contained inside the header files even a separate file named pin_config will be provided.
+
+
+*/
+
 #include "driverlib/commonheader.h"
 #include "motor.c"
 #include "sensor.c"

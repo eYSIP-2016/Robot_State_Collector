@@ -1,3 +1,14 @@
+/*
+
+This code was used to test the White Line Sensor Module.This module has 3 White Line Sensors so PORTS PE1 , PE2 and PE3 were used for testing purposes.
+
+Simple code which was used to check the values incoming from the the sensors using the debugger of CCS. 
+
+*/
+
+
+
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
@@ -12,7 +23,7 @@
 int WC;
 int WR;
 int WL;
-uint32_t ui32ADC0Value[1];
+uint32_t ui32ADC0Value[1]; // Buffer to store the intermediate values incoming from the ADC Module.
 
 void getdata()
 {

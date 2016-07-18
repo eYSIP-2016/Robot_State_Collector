@@ -1,3 +1,22 @@
+/*
+
+The Ports used in LCD were same as those used by us for motor so we had to reshuffle the pins we were using.
+
+
+PORTS used for LCD are : PORT B 0-7 for Data as LCD is configured in 8 bit mode. 
+		 	 PORT A4 for RS
+		 	 PORT A5 for RW
+		 	 PORT C6 for EN
+
+PORTS used for motor are : PORT E4 and E5 for EN. 
+		 	   PORT A6 and A7 for right wheel
+		 	   PORT A2 and A3 for left Wheel
+
+*/
+
+
+
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"

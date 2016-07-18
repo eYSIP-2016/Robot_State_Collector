@@ -1,3 +1,13 @@
+/*
+
+All the sensor values are being sent back to the GUI and the state collection is achieved by this code.
+
+Now only start_collection(); now needs to be added to collect the data.
+
+*/
+
+
+
 #include "driverlib/commonheader.h"
 #include "motor.c"
 #include "sensor.c"

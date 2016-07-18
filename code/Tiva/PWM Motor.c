@@ -1,3 +1,15 @@
+/*
+
+This code was used to test the Motors. The motors were connected to the PORT A6 and PA7 for the left wheel and PORT PE1 and PE2 for the riht wheel on the TIVA board.
+PWM was generated on PORT PB6 and PB7 and was sed to provide 'enable' to the motor driver for the given two wheels.
+
+The speed of the wheels was changed periodically by changing the width of the PWM.
+
+*/
+
+
+
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"

@@ -1,3 +1,14 @@
+/*
+
+This code was used to test the buzzer and motor simultaneously . The buzzer was connected to the PORT A5 on the TIVA board and the motors were connected to the ports 
+mentioned in the "PWM Motor" file. 
+
+Alternatively the buzzer and the motor were made to work.
+
+*/
+
+
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"

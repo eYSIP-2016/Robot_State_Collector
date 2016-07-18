@@ -1,3 +1,17 @@
+/*
+
+This code was used to test the SHARP sensor. The buzzer was connected to the PORT E3 on the TIVA board. This was the first time we were using a pin as an ADC.
+
+Simple code which was used to check the values incoming from the the sensor using the debugger of CCS. 
+
+NOTE: As TIVA board is a 12 bit micro-controller and ATMEGA 2560 is an 8 bit micro-controller the formula used for converting the digital values to distance in mm 
+      would not work in both of the above mentioned micro-controllers.
+
+*/
+
+
+
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"

@@ -1,4 +1,17 @@
 /*
+
+This code was used to test the LCD. The code was provided to us by Saurav Sir. 
+
+PORTS used are : PORT B 0-7 for Data as LCD is configured in 8 bit mode. 
+		 PORT A4 for RS
+		 PORT A5 for RW
+		 PORT A6 for EN
+
+*/
+
+
+
+/*
  * main.c
  *
  *  Created on: 06-Mar-2016

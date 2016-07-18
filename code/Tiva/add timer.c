@@ -1,3 +1,14 @@
+/*
+
+Timer needs to be added in order to send the relevant data back to the GUI for state collection.
+
+This code sends strings only at certain instances. 
+
+This code checks whether all the components are working together or not.
+
+*/
+
+
 #include "driverlib/commonheader.h"
 #include "motor.c"
 #include "sensor.c"

@@ -1,3 +1,22 @@
+/*
+
+This code was used to test the X-BEE module on TIVA board. The motors were also used in conjuction with the X-BEE.
+
+The X-BEE just sends "fast" or "slow" according to the speed of the motors.
+
+
+PORTS used are : PORT C4 for RX
+		 PORT C5 for TX
+
+PORTS used for motor are : PORT E4 and E5 for EN. 
+		 	   PORT A6 and A7 for right wheel
+		 	   PORT A2 and A3 for left Wheel
+		
+*/
+
+
+
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
@@ -66,9 +85,9 @@ int main(void)
 
 
 
-	GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE, GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_6|GPIO_PIN_7); // Set pin 7 as the output port
+	GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE, GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_6|GPIO_PIN_7); 
 
-	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_6|GPIO_PIN_7,68); // Give '1' to pin 7
+	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_6|GPIO_PIN_7,68); 
 
 
 	UARTConfigSetExpClk(UART4_BASE, SysCtlClockGet(), 115200, (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
@@ -79,7 +98,7 @@ int main(void)
 	{
 		SysCtlDelay(4000000*10);
 		temp = 1;
-		UARTSend((uint8_t *)"Forward",7);
+		UARTSend((uint8_t *)"Fast",4);
 		PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4, PWMGenPeriodGet(PWM0_BASE, PWM_GEN_2) / 1.25);
 		PWMPulseWidthSet(PWM0_BASE, PWM_OUT_5, PWMGenPeriodGet(PWM0_BASE, PWM_GEN_2) / 1.25);
 		SysCtlDelay(4000000*10);

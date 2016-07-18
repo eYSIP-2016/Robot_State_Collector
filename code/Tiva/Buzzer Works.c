@@ -1,3 +1,10 @@
+/*
+
+This code was used to test the buzzer. The buzzer was connected to the PORT A7 on the TIVA board. Just writing 1 to this pin made the buzzer beep.
+
+*/
+
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"

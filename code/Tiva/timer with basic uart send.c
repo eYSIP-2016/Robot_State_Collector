@@ -1,3 +1,12 @@
+/*
+
+Timer is added and random data is being sent back to test the code.
+
+Task remaining is to the send the sesor readings.
+
+*/
+
+
 #include "driverlib/commonheader.h"
 #include "motor.c"
 #include "sensor.c"
