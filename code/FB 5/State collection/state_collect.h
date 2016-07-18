@@ -1,17 +1,15 @@
 
 /*
 *Project name:          Robot State Collector
-*Description:           This program is about to collect the state(like different sensor values,velocity etc.)of firebird V robot 
+*Description:           This program is about to collect the state(like different sensor values etc.)of firebird V robot 
                         repeatedly after 0.5 sec using timer4 interrupt.
 *Author's name:         Amanpreet Singh,Amit Raushan 
 *Mentor's name:         Shubham Gupta
-*Filename:              state_collect.c
+*Filename:              state_collect.h
 *Functions:             _adc_pinconfig (),_adc_init(),_conv_adc(unsigned char),converttomm_41sk(unsigned int)._timer4_init(),
-                        send ( int),ISR(TIMER4_OVF_vect),_uart0_init(),_port_init(),_init_devices(), _left_encoder_pin_config (),
-                        _right_encoder_pin_config (),_left_position_encoder_interrupt_init (),_right_position_encoder_interrupt_init (),
-                        ISR(INT5_vect),ISR(INT4_vect),velocity_leftwheel_cmpersec(),velocity_rightwheel_cmpersec()
+                        send ( int),ISR(TIMER4_OVF_vect),_uart0_init(),_port_init(),_init_devices()
 
-*Global variables:       count,sp1,lwl,cwl,rwl,IR1,leftpulse,rightpulse
+*Global variables:       count,sp1,sp2,sp3,sp4,lwl,cwl,rwl,IR1,IR2,IR3,IR4
  ************************************************************************************/   
 /*********************************************************************************      
 ADC pin Connections used for state collection of different sensors:
@@ -30,19 +28,16 @@ ADC CH. 	PORT	Sensor
 12		    PK4		Sharp IR range sensor 4
 13		    PK5		Sharp IR range sensor 5
 
-Micro-controller pins used for velocity collection:
-PE4 (INT4): External interrupt for left motor position encoder
-PE5 (INT5): External interrupt for the right position encoder
 
  State collection sequence:
- ****************************************************************************
- * COUNT VALUE  LEFT WL SENSOR  CENTER WL SENSOR  RIGHT WL SENSOR	 SP1  SP2  SP3  
- IR1  IR2  IR3    LEFT WHEEL VELOCITY   RIGHT WHEEL VELOCITY 
+ **************************************************************************************
+ * COUNT VALUE  LEFT WL SENSOR  CENTER WL SENSOR  RIGHT WL SENSOR	 SP1  SP2  SP3  SP4
+ IR1  IR2  IR3  IR4
  
  
  note: SP->Sharp IR sensor
        IR->IR proximity analog sensor
- ****************************************************************************
+ ***************************************************************************************
   Note:
   
   1. Don't forget to include "state_collect.h" in User's program and also it is necessary to write the function
@@ -67,13 +62,12 @@ PE5 (INT5): External interrupt for the right position encoder
 
 char a[3];          //array having size 3
 int count = 0;
-unsigned char sp1,sp2,sp3;    //variables which contains sharp sensor values
-unsigned char lwl = 0;        //left white line sensor 
-unsigned char cwl = 0;       //center white line sensor 
-unsigned char rwl = 0;       //right white line sensor 
-unsigned char IR1,IR2,IR3 = 0;//proximity sensors 
-int leftpulse = 0;
-int rightpulse = 0;
+unsigned char sp1,sp2,sp3,sp4;    //variables which contains sharp sensor values
+unsigned char lwl = 0;           //left white line sensor 
+unsigned char cwl = 0;           //center white line sensor 
+unsigned char rwl = 0;           //right white line sensor 
+unsigned char IR1,IR2,IR3,IR4 = 0;//proximity sensors 
+
 
 /*
 *
@@ -235,9 +229,11 @@ void getdigital(void)
 	 sp1 = _conv_adc(9);     //Getting data of sharp sensor1.
 	 sp2 = _conv_adc(10);    //Getting data of sharp sensor2.
 	 sp3 = _conv_adc(11);    //Getting data of sharp sensor3.
+	 sp4 = _conv_adc(12);    //Getting data of sharp sensor4.
 	 IR1 = _conv_adc(4);     //Getting value of IR proximity sensor1.
 	 IR2 = _conv_adc(5);     //Getting value of IR proximity sensor2.
 	 IR3 = _conv_adc(6);     //Getting value of IR proximity sensor3.
+	 IR4 = _conv_adc(7);     //Getting value of IR proximity sensor4.
 	 
 	
 }
@@ -262,12 +258,13 @@ ISR(TIMER4_OVF_vect)
 		send(converttomm_41sk(sp1));//send the value of sharp sensor 1
 		send(converttomm_41sk(sp2));//send the value of sharp sensor 2
 		send(converttomm_41sk(sp3));//send the value of sharp sensor 3 
+		send(converttomm_41sk(sp4));//send the value of sharp sensor 4
 		send(IR1);                  //send the value of proximity sensor1
 		send(IR2);                  //send the value of proximity sensor2
         send(IR3);                  //send the value of proximity sensor3
+		send(IR4);                  //send the value of proximity sensor4
 
-		send(velocity_leftwheel_cmpersec());  //send the value of left wheel velocity in cm.
-		send(velocity_rightwheel_cmpersec()); //send the value of right wheel velocity in cm.
+		
 		count++;                      //increase the value of count
 		sei();                        //enables the global interrupt      
 }
@@ -289,33 +286,6 @@ void _uart0_init(void)
 	UCSR0B = 0x98;
 }
 
-/*
-* Function Name:                   _left_encoder_pin_config
-* Input:			               NONE
-* Output:                          configure INT4 (PORTE 4) pin as input for the left position encoder.
-* Logic:			               1 sets the pin as output and 0 for input.
-* Example Call:		               -left_encoder_pin_config ();
-*/
-
-
-void _left_encoder_pin_config (void)
-{   
-	DDRE  = DDRE & 0xEF;  //Set the direction of the PORTE 4 pin as input
-	PORTE = PORTE | 0x10; //Enable internal pull-up for PORTE 4 pin
-}
-/*
-* Function Name:                   _right_encoder_pin_config
-* Input:			               NONE
-* Output:                          configure INT5 (PORTE 5) pin as input for the left position encoder.
-* Logic:			               1 sets the pin as output and 0 for input.
-* Example Call:		               _right_encoder_pin_config ();
-*/
-
-void _right_encoder_pin_config (void)
-{  
-	 DDRE  = DDRE & 0xDF;  //Set the direction of the PORTE 5 pin as input
-	PORTE = PORTE | 0x20; //Enable internal pull-up for PORTE 5 pin
-}
 
 /*
 * Function Name:                   _port_init
@@ -328,98 +298,8 @@ void _port_init()
 {
 
 	_adc_pinconfig();
-	_left_encoder_pin_config () ;
-    _right_encoder_pin_config (); 
-}
-
-	/*
-	* Function Name:     _left_position_encoder_interrupt_init
-	* Input:			 NONE
-	* Output:            Enable Interrupt INT4 for left position encoder.
-	* Logic :            NONE
-	* Example Call:		 _left_position_encoder_interrupt_init ();
-	*/
+}	
 	
-void _left_position_encoder_interrupt_init (void)
-	{
-		cli(); //Clears the global interrupt
-		EICRB = EICRB | 0x02; // INT4 is set to trigger with falling edge
-		EIMSK = EIMSK | 0x10; // Enable Interrupt INT4 for left position encoder
-		sei();   // Enables the global interrupt
-	}
-/*
-	* Function Name:     _right_position_encoder_interrupt_init
-	* Input:			 NONE
-	* Output:            Enable Interrupt INT5 for right position encoder.
-	* Logic :            NONE
-	* Example Call:		 _right_position_encoder_interrupt_init ();
-	*/
-
-	void _right_position_encoder_interrupt_init (void)
-	{
-		cli(); //Clears the global interrupt
-		EICRB = EICRB | 0x08; // INT5 is set to trigger with falling edge
-		EIMSK = EIMSK | 0x20; // Enable Interrupt INT5 for right position encoder
-		sei();   // Enables the global interrupt
-	}
-	/*
-	* Interrupt Service Routine Name:     ISR(INT5_vect)
-	* Input:			                  Interrupt pulse at INT5 pin
-	* Output:                             Counts the number of output pulses receiving from right position encoder
-	* Logic :                             Increments variable 'rightpulse' on receiving pulse from right position encoder
-	* Example Call:		                  NONE
-	*/
-	
-	ISR(INT5_vect)
-	{
-		rightpulse++;  //increment right pulse  count
-	}
-
-/*
-	* Interrupt Service Routine Name:     ISR(INT4_vect)
-	* Input:			                  Interrupt pulse at INT4 pin
-	* Output:                             Counts the number of output pulses receiving from left position encoder
-	* Logic :                             Increments variable 'leftpulse' on receiving pulse from left position encoder
-	* Example Call:		                  NONE
-	*/
-
-	
-	ISR(INT4_vect)
-	{
-		leftpulse++;  //increment left pulse count
-	}
-	
-/*
-	* Function Name:      velocity_leftwheel_cmpersec
-	* Input:			 NONE
-	* Output:            calculates the velocity of left wheel in cm per second.
-	* Logic :            velocity is calculated as distance traveled in 0.5 seconds divided by 0.5 seconds.
-	* Example Call:		 velocity_leftwheel_cmpersec();
-	*/
-
-int  velocity_leftwheel_cmpersec()
-{
-	int vel;
-	vel= (leftpulse*5.44)/(10*0.5);    //0.5 sec is the time after which reading is taken.
-	leftpulse=0;
-	return vel;
-}
-/*
-	* Function Name:      velocity_rightwheel_cmpersec
-	* Input:			 NONE
-	* Output:            calculates the velocity of right wheel in cm per second.
-	* Logic :            velocity is calculated as distance traveled in 0.5 seconds divided by 0.5 seconds.
-	* Example Call:		 velocity_rightwheel_cmpersec();
-	*/
-
-int velocity_rightwheel_cmpersec()
-{
-	int vel;
-	vel= (rightpulse*5.44)/(10*0.5);  //0.5 sec is the time after which reading is taken.
-	rightpulse=0;
-	return vel;
-}
-
 /*
 	* Function Name:     _init_devices
 	* Input:			 NONE
@@ -435,8 +315,6 @@ void _init_devices()
 	_adc_init();
 	_uart0_init(); //Initialize UART0 for wireless serial communication
 	TIMSK4 = 0x01; //Timer/Counter 4 Overflow interrupt is enabled
-	_left_position_encoder_interrupt_init ();
-	_right_position_encoder_interrupt_init ();
 	sei();         // Enables the global interrupt
 }
 #endif /*STATE_COLLECT_H */
