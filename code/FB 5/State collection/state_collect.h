@@ -2,7 +2,7 @@
 /*
 *Project name:          Robot State Collector
 *Description:           This program is about to collect the state(like different sensor values etc.)of firebird V robot 
-                        repeatedly after 0.5 sec using timer4 interrupt.
+                        repeatedly after 0.5 sec using timer4 interrupt and sending the values using X-bee.
 *Author's name:         Amanpreet Singh,Amit Raushan 
 *Mentor's name:         Shubham Gupta
 *Filename:              state_collect.h
