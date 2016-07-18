@@ -369,7 +369,7 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
 
             s.close();                                                          // Closes the connection with the server.
 
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");         // Creates a Cipher type object and initialises it for RSA type encryption/decryption with PKCS5Padding.
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");         // Creates a Cipher type object and initialises it for RSA type encryption/decryption with PKCS1Padding.
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);                        // Initialises Cipher in Encryption mode.    
 
             byte[] key = myDesKey.getEncoded();                                 // Converts the key into a byte array.
