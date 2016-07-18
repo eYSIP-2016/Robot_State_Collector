@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "State_collection_white_line_sensing", "State_collection_white_line_sensing\State_collection_white_line_sensing.cproj", "{E1D6FE36-B52D-42E7-A86B-169D0268C68F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1D6FE36-B52D-42E7-A86B-169D0268C68F}.Debug|AVR.ActiveCfg = Debug|AVR
+		{E1D6FE36-B52D-42E7-A86B-169D0268C68F}.Debug|AVR.Build.0 = Debug|AVR
+		{E1D6FE36-B52D-42E7-A86B-169D0268C68F}.Release|AVR.ActiveCfg = Release|AVR
+		{E1D6FE36-B52D-42E7-A86B-169D0268C68F}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
