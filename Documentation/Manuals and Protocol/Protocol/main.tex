@@ -1,0 +1,116 @@
+\documentclass[a4paper,12pt,oneside]{book}
+
+%-------------------------------Start of the Preable------------------------------------------------
+\usepackage[english]{babel}
+\usepackage{blindtext}
+%packagr for hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\urlstyle{same}
+%use of package fancy header
+\usepackage{fancyhdr}
+\setlength\headheight{26pt}
+\fancyhf{}
+%\rhead{\includegraphics[width=1cm]{logo}}
+\lhead{\rightmark}
+\rhead{\includegraphics[width=1cm]{logo}}
+\fancyfoot[RE, RO]{\thepage}
+\fancyfoot[CE, CO]{\href{http://www.e-yantra.org}{www.e-yantra.org}}
+
+\pagestyle{fancy}
+
+%use of package for section title formatting
+\usepackage{titlesec}
+\titleformat{\chapter}
+  {\Large\bfseries} % format
+  {}                % label
+  {0pt}             % sep
+  {\huge}           % before-code
+ 
+%use of package tcolorbox for colorful textbox
+\usepackage[most]{tcolorbox}
+\tcbset{colback=cyan!5!white,colframe=cyan!75!black,halign title = flush center}
+
+\newtcolorbox{mybox}[1]{colback=cyan!5!white,
+colframe=cyan!75!black,fonttitle=\bfseries,
+title=\textbf{\Large{#1}}}
+
+%use of package marginnote for notes in margin
+\usepackage{marginnote}
+
+%use of packgage watermark for pages
+%\usepackage{draftwatermark}
+%\SetWatermarkText{\includegraphics{logo}}
+\usepackage[scale=2,opacity=0.1,angle=0]{background}
+\backgroundsetup{
+contents={\includegraphics{logo}}
+}
+
+%use of newcommand for keywords color
+\usepackage{xcolor}
+\newcommand{\keyword}[1]{\textcolor{red}{\textbf{#1}}}
+
+%package for inserting pictures
+\usepackage{graphicx}
+
+%package for highlighting
+\usepackage{color,soul}
+
+%new command for table
+\newcommand{\head}[1]{\textnormal{\textbf{#1}}}
+
+
+%----------------------End of the Preamble---------------------------------------
+
+
+\begin{document}
+
+%---------------------Title Page------------------------------------------------
+\begin{titlepage}
+\raggedright
+{\Large eYSIP2016\\[1cm]}
+{\Huge\scshape Robot State Collector \\[.1in]}
+\vspace*{\fill}
+\begingroup
+\centering
+
+\Large \textbf{PROTOCOL}
+
+\endgroup
+\vspace*{\fill}
+\begin{flushright}
+{\large Amanpreet Singh \\}
+{\large Amit Raushan \\}
+{\large Shubham Gupta \\}
+{\large Duration of Internship: $ 21/05/2016-10/07/2016 $ \\}
+\end{flushright}
+
+{\itshape 2016, e-Yantra Publication}
+\end{titlepage}
+%-------------------------------------------------------------------------------
+
+\chapter[Project Tag]{List of all the Protocols}
+
+\begin{enumerate}
+    \item The header files provided must be in the same folder as that of the user's code for effectivaely merging the state collection code.
+    \item In the GUI provided to the user there has to be a "ip.txt" file which contains the static IP of the server and a "publicKey.txt" which contains the Public Key which would be used to encrypt the Symmetric Key before sending it to the server.  
+    \item In Client Side Code changes have to be made to use the GUI for reading information at a different Baud Rate. \\ \\ 
+    Inside the function SimpleRead(String com) there is a line as follows:\\
+    serialPort.setSerialPortParams(9600,SerialPort.DATABITS\_8,SerialPort.STOPBITS\_1, SerialPort.PARITY\_NONE);\\
+    The required Baud Rate can be written instead of 9600 to read data coming with that Baud Rate.
+    \item To change the number of readings being sent to the GUI following changes need to be made. \\ \\
+    Inside a function called run() there is a command as follows:\\
+    if (count == 48) \\ 
+    Just change 48 to (4*number of readings per period) to prevent the haphazard storing of data.
+    \item To change the time after which state is being collected, configure the timer in state collection header file accordingly.
+\end{enumerate}
+
+
+\end{document}
+
