@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.5.24)  21 JUL 2016 16:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.5.24)  21 JUL 2016 16:27
 entering extended mode
 **"C:/Users/Amanpreet Singh/Documents/e Yantra/Robot State Collector/Robot_Stat
 e_Collector/Documentation/report_eYSIP/Robot_State_Collector.tex"
@@ -1365,11 +1365,11 @@ File: XBee_connected.jpg Graphic file (type jpg)
 Package pdftex.def Info: XBee_connected.jpg used on input line 309.
 (pdftex.def)             Requested size: 244.11453pt x 183.0859pt.
 
-<tiva_pin.jpg, id=311, 215.30438pt x 321.45094pt>
-File: tiva_pin.jpg Graphic file (type jpg)
- <use tiva_pin.jpg>
-Package pdftex.def Info: tiva_pin.jpg used on input line 316.
-(pdftex.def)             Requested size: 120.56963pt x 180.01129pt.
+<Tiva_pin.png, id=311, 267.24844pt x 210.03468pt>
+File: Tiva_pin.png Graphic file (type png)
+ <use Tiva_pin.png>
+Package pdftex.def Info: Tiva_pin.png used on input line 316.
+(pdftex.def)             Requested size: 213.79904pt x 168.02797pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 320--321
 
@@ -1377,13 +1377,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 320--321
 
 File: logo.png Graphic file (type png)
 <use logo.png>
-Package pdftex.def Info: logo.png used on input line 321.
+Package pdftex.def Info: logo.png used on input line 322.
 (pdftex.def)             Requested size: 123.46092pt x 131.49092pt.
 File: logo.png Graphic file (type png)
  <use logo.png>
-Package pdftex.def Info: logo.png used on input line 321.
+Package pdftex.def Info: logo.png used on input line 322.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
- [13 <./XBee_connected.jpg> <./tiva_pin.jpg>]
+ [13 <./XBee_connected.jpg> <./Tiva_pin.png>]
 File: logo.png Graphic file (type png)
 
 <use logo.png>
@@ -1403,7 +1403,7 @@ File: logo.png Graphic file (type png)
 Package pdftex.def Info: logo.png used on input line 384.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
  [15]
-<Block.png, id=336, 483.30562pt x 288.3272pt>
+<Block.png, id=337, 483.30562pt x 288.3272pt>
 File: Block.png Graphic file (type png)
  <use Block.png>
 Package pdftex.def Info: Block.png used on input line 390.
@@ -1422,7 +1422,7 @@ File: logo.png Graphic file (type png)
 Package pdftex.def Info: logo.png used on input line 393.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
  [16 <./Block.png>]
-<all_components.jpg, id=344, 963.6pt x 1284.8pt>
+<all_components.jpg, id=345, 963.6pt x 1284.8pt>
 File: all_components.jpg Graphic file (type jpg)
  <use all_components.jpg>
 Package pdftex.def Info: all_components.jpg used on input line 399.
@@ -1433,7 +1433,7 @@ Overfull \hbox (1.86957pt too wide) in paragraph at lines 396--402
 g the Robot.
  []
 
-<motor_2_ic.jpg, id=345, 1284.8pt x 963.6pt>
+<motor_2_ic.jpg, id=346, 1284.8pt x 963.6pt>
 File: motor_2_ic.jpg Graphic file (type jpg)
  <use motor_2_ic.jpg>
 Package pdftex.def Info: motor_2_ic.jpg used on input line 405.
@@ -1448,13 +1448,13 @@ File: logo.png Graphic file (type png)
 Package pdftex.def Info: logo.png used on input line 408.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
  [17 <./all_components.jpg> <./motor_2_ic.jpg>]
-<caster_whiteline.jpg, id=355, 963.6pt x 1284.8pt>
+<caster_whiteline.jpg, id=356, 963.6pt x 1284.8pt>
 File: caster_whiteline.jpg Graphic file (type jpg)
  <use caster_whiteline.jpg>
 Package pdftex.def Info: caster_whiteline.jpg used on input line 412.
 (pdftex.def)             Requested size: 154.17915pt x 205.5722pt.
 
-<a_sharp.jpg, id=356, 1284.8pt x 963.6pt>
+<a_sharp.jpg, id=357, 1284.8pt x 963.6pt>
 File: a_sharp.jpg Graphic file (type jpg)
  <use a_sharp.jpg>
 Package pdftex.def Info: a_sharp.jpg used on input line 419.
@@ -1469,13 +1469,13 @@ File: logo.png Graphic file (type png)
 Package pdftex.def Info: logo.png used on input line 422.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
  [18 <./caster_whiteline.jpg> <./a_sharp.jpg>]
-<buzzer.jpg, id=367, 963.6pt x 1284.8pt>
+<buzzer.jpg, id=368, 963.6pt x 1284.8pt>
 File: buzzer.jpg Graphic file (type jpg)
  <use buzzer.jpg>
 Package pdftex.def Info: buzzer.jpg used on input line 427.
 (pdftex.def)             Requested size: 154.17915pt x 205.5722pt.
 
-<Tiva_attatched.jpg, id=368, 963.6pt x 1284.8pt>
+<Tiva_attatched.jpg, id=369, 963.6pt x 1284.8pt>
 File: Tiva_attatched.jpg Graphic file (type jpg)
  <use Tiva_attatched.jpg>
 Package pdftex.def Info: Tiva_attatched.jpg used on input line 433.
@@ -1490,13 +1490,13 @@ File: logo.png Graphic file (type png)
 Package pdftex.def Info: logo.png used on input line 436.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
  [19 <./buzzer.jpg> <./Tiva_attatched.jpg>]
-<wh_attatched.jpg, id=378, 963.6pt x 1284.8pt>
+<wh_attatched.jpg, id=379, 963.6pt x 1284.8pt>
 File: wh_attatched.jpg Graphic file (type jpg)
  <use wh_attatched.jpg>
 Package pdftex.def Info: wh_attatched.jpg used on input line 441.
 (pdftex.def)             Requested size: 154.17915pt x 205.5722pt.
 
-<all_connected.jpg, id=379, 1284.8pt x 963.6pt>
+<all_connected.jpg, id=380, 1284.8pt x 963.6pt>
 File: all_connected.jpg Graphic file (type jpg)
  <use all_connected.jpg>
 Package pdftex.def Info: all_connected.jpg used on input line 448.
@@ -1511,13 +1511,13 @@ File: logo.png Graphic file (type png)
 Package pdftex.def Info: logo.png used on input line 451.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
  [20 <./wh_attatched.jpg> <./all_connected.jpg>]
-<lcd_a.jpg, id=389, 1284.8pt x 963.6pt>
+<lcd_a.jpg, id=390, 1284.8pt x 963.6pt>
 File: lcd_a.jpg Graphic file (type jpg)
  <use lcd_a.jpg>
 Package pdftex.def Info: lcd_a.jpg used on input line 456.
 (pdftex.def)             Requested size: 205.5722pt x 154.17915pt.
 
-<XBee_a.jpg, id=390, 963.6pt x 1284.8pt>
+<XBee_a.jpg, id=391, 963.6pt x 1284.8pt>
 File: XBee_a.jpg Graphic file (type jpg)
  <use XBee_a.jpg>
 Package pdftex.def Info: XBee_a.jpg used on input line 463.
@@ -1532,13 +1532,13 @@ File: logo.png Graphic file (type png)
 Package pdftex.def Info: logo.png used on input line 466.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
  [21 <./lcd_a.jpg> <./XBee_a.jpg>]
-<battery_a.jpg, id=400, 963.6pt x 1284.8pt>
+<battery_a.jpg, id=401, 963.6pt x 1284.8pt>
 File: battery_a.jpg Graphic file (type jpg)
  <use battery_a.jpg>
 Package pdftex.def Info: battery_a.jpg used on input line 471.
 (pdftex.def)             Requested size: 154.17915pt x 205.5722pt.
 
-<robot.jpg, id=401, 1284.8pt x 963.6pt>
+<robot.jpg, id=402, 1284.8pt x 963.6pt>
 File: robot.jpg Graphic file (type jpg)
  <use robot.jpg>
 Package pdftex.def Info: robot.jpg used on input line 478.
@@ -1661,9 +1661,9 @@ s/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/Amanpreet Singh/AppData/Local/Pr
 ograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Amanpreet
  Singh/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.
 pfb>
-Output written on Robot_State_Collector.pdf (30 pages, 3259043 bytes).
+Output written on Robot_State_Collector.pdf (30 pages, 3245065 bytes).
 PDF statistics:
- 542 PDF objects out of 1000 (max. 8388607)
+ 543 PDF objects out of 1000 (max. 8388607)
  169 named destinations out of 1000 (max. 500000)
  510 words of extra memory for PDF output out of 10000 (max. 10000000)
 
