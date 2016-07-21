@@ -95,16 +95,16 @@ contents={\includegraphics{logo}}
 \chapter[Robot State Collector]{Robot State Collector}
 \section{Abstract}
 
-\hspace{5mm}This project aims at developing a State Collection Algorithm which is easy to integrate with user code without interfering with it. Our code should be capable of collecting the sensor values, the buzzer and LCD data periodically. It should also send this data to the GUI developed for this specific purpose. The GUI should be able to encrypt the collected data and send it to the e-Yantra servers.
+\hspace{5mm}This project aims at developing a State Collection Algorithm which is easy to integrate with user code without interfering with it. Our code should be capable of collecting the sensor values periodically. It should also send this data to the GUI developed for this specific purpose. The GUI should be able to encrypt the collected data and send it to the e-Yantra servers.
 
-This would be helpful in virtually re-creating runs ,using the user's code and the data collected by us.
+This would be helpful in virtually re-creating runs ,using the user's code and the data collected by the State Collection Algorithm.
 
 The main tasks involved in the project are :
 
 \begin{enumerate}
 
     \item Collecting timed data about the state of the robot(sensors etc.).
-    \item Developing a GUI that picks up the data from the robot,encrypts it and send it to e-yantra servers.
+    \item Developing a GUI that picks up the data from the robot, encrypts it and send it to e-yantra servers.
     \item Writing server side code to receive and decrypt the state information obtained from GUI developed in step 2.
 
 \end{enumerate}
@@ -114,9 +114,10 @@ The main tasks involved in the project are :
 
 \begin{enumerate}
 
-    \item Successfully collected the data on Fire Bird V and Tiva Robot using the specially developed State Collection Algorithm.
+    \item Successfully collected the data on Fire Bird V and Tiva Robot using the State Collection Algorithm.
     \item To avoid storing the data on the volatile memory on any robot a XBee module is used which directly sends the data to the GUI wirelessly. This also saves space on the robot's memory.
     \item Developed a GUI to read the incoming data from the Robot. The GUI encrypts the data and sends it back to the server. The GUI is also capable of detecting if any changes were made to the file before sending it to the server.
+    \item Implemented a Demo Server.
     \item Made a Robot using the Tiva board so as to check that our algorithm and GUI are not restricted to only Fire Bird V.
     \item Performed state collection on the newly developed robot.
 \newpage
@@ -249,21 +250,21 @@ The main tasks involved in the project are :
     \begin{figure}[!h]
         \centering
         \includegraphics[scale=0.1]{wire}
-        \caption{20 pin Connector wire}
+        \caption{20 Pin Connector Wire}
       \end{figure}
-    \item Female bug strip.
+    \item Female Bug Strip.
     \\
     \begin{figure}[!h]
         \centering
         \includegraphics[scale=0.25]{fmbug}
-        \caption{Female bug strip}
+        \caption{Female Bug Strip}
       \end{figure}
       \newpage
-    \item Male bug strip.
+    \item Male Bug Strip.
     \begin{figure}[!h]
         \centering
         \includegraphics[scale=0.12]{mbug}
-        \caption{Male bug strip}
+        \caption{Male Bug Strip}
       \end{figure}
     \item Male to Female Jumper Wires.
     \begin{figure}[!h]
@@ -512,7 +513,7 @@ Basic connections of different components used with Tiva Robot.
         \includegraphics[scale=0.16]{all_components}
         \caption{All the components used to build the Robot.}
       \end{figure}
-\item Assemble the chassis, two dc geared motors and two wheels.Then conect the motors with the Motor Driver IC.
+\item Assemble the chassis, two DC geared motors and two wheels. Then connect the motors with the Motor Driver IC.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{motor_2_ic}
@@ -526,7 +527,7 @@ Basic connections of different components used with Tiva Robot.
         \caption{Caster Wheel and White Line Sensors attached to chassis}
       \end{figure}
 
-\item AttachSharp Sensor to the chassis.
+\item Attach Sharp Sensor to the chassis.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{a_Sharp}
@@ -596,7 +597,8 @@ Basic connections of different components used with Tiva Robot.
 
 \newpage
 \section{Software and Code}
-\href{https://github.com/eYSIP-2016/Robot_State_Collector/tree/master/code}{Github link} for the repository of code
+The Github repository can be found at 
+ \href{https://github.com/eYSIP-2016/Robot_State_Collector/tree/master/code}{this link}. 
 \subsection{State Collection Algorithm}
 We use a specific Timer to generate an interrupt after 0.5s. Whenever the interrupt occurs, the state information(i.e. values of all sensors etc.) is collected and transmitted wirelessly to the PC/Laptop via XBee.\\
     Our code is entirely inside the provided header file. A simple function call starts the State Collection.\\
@@ -611,7 +613,7 @@ NOTE: The Timer used by us cannot be used by the user.
 
 \subsection{Client GUI and Server}
 
-The GUI is capable of reading the incoming data from the XBee module. We use a symmetric key encryption scheme to encrypt the collected the state data. The key of the symmetric key encryption scheme is encrypted using a public key encryption scheme. At the end the encrypted data can be sent to the server if the user wishes.
+The GUI is capable of reading the incoming data from the XBee module. We use a symmetric key encryption scheme to encrypt the collected state data. The shared key for symmetric key encryption scheme is encrypted using a public key encryption scheme before it is sent by the client to the server. Encrypted state information can be sent to the server if the user wishes.
 
 \newpage
 
@@ -620,7 +622,7 @@ The GUI is capable of reading the incoming data from the XBee module. We use a s
 \subsection{Steps for merging the State Collection Code with User's Code for Fire Bird V}
 \begin{enumerate}
 
-\item include "state\_collect.h" in User' Code
+\item Include "state\_collect.h" in User' Code
 
 \item In main after initialising all the devices call the function  "\_init\_devices()"
 
@@ -632,7 +634,7 @@ NOTE : The files included above should be present inside the same folder as that
 \subsection{Steps for merging the State Collection Code with User's Code for Tiva Robot}
 \begin{enumerate}
 
-\item include "common\_header.h" in User' Code
+\item Include "common\_header.h" in User' Code
 
 \item In main call the function  "start\_collection()".
 
@@ -644,10 +646,10 @@ NOTE : The files included above should be present inside the same folder as that
 \subsection{Steps for Using the GUI}
 \begin{enumerate}
 
-\item Login with the credentials provided.
+\item Login with the credentials that will be provided at the time of team registration.
 \item Make sure that the XBee adapter is connected to the laptop.
 \item Click on the "Search for available COM ports " button.
-\item From the Drop Down Menu select the COM port on which the XBee adapter is connected. Selecting the COM port would establish a connection with the XBee and the "Not connected" would change to "Connected".
+\item From the Drop Down Menu select the COM port on which the XBee adapter is connected. Selecting the COM port would establish a connection with the XBee and the "Not connected" would change to "Connected". The run starts as soon as the XBee is connected to the GUI.
 \item After the run is complete click on "End of Run" button to indicate the end of the robot's task.
 \item To send the data to the server click on "Connect to the Server" button.
 \item To disconnect from the COM port press the "Disconnect" button.
@@ -661,8 +663,8 @@ NOTE : The files included above should be present inside the same folder as that
 \item In the same folder as that of your project files listed below should be present.
 	\begin{itemize} 
 		\item "keyStoreName.jceks"
-		\item "ip.txt"
-	\end{itemize} 
+	\end{itemize}
+NOTE: This KeyStore is password protected and the password has been commnicated to the team separately.
 \item Now Run the Java program and the server is now started.  
 \item To generate a new Private and Public key Pair just run the code within "Generation of Private and Public Key.java". And then just provide the newly generated "publicKey.txt".
 
@@ -675,8 +677,8 @@ NOTE : The files included above should be present inside the same folder as that
 
 \begin{enumerate}
 
-\item LCD data can be collected.
-\item Position encoders can be configured with the Tiva Bot.
+\item LCD, Buzzer and Position Encoders data can be collected.
+\item Position encoders can be configured with the Tiva Robot.
 
 \end{enumerate}
 
@@ -690,8 +692,8 @@ NOTE : The files included above should be present inside the same folder as that
 \begin{enumerate}
 
 \item XBee doesn't run at baud rate of 115200 on Fire Bird V.
-\item XBee doesn't run at baud rate of 9600 on Tiva bot.
-\item If we change the frequency of the system clock on Tiva bot the XBee doesn't work.
+\item XBee doesn't run at baud rate of 9600 on Tiva Robot.
+\item If we change the frequency of the system clock on Tiva Robot the XBee doesn't work.
 \item If we have to collect data of the position encoders then it has to be done with the interrupt used by the user and hence we have to change the user's code a bit.
 \item The server side code hasn't been tested with multiple clients.
 \item The server would give an error if the user logs in and closes the GUI without sending the data.
