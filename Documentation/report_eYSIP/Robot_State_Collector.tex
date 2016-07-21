@@ -116,8 +116,8 @@ The main tasks involved in the project are :
 
     \item Successfully collected the data on Fire Bird V and Tiva Robot using the specially developed State Collection Algorithm.
     \item To avoid storing the data on the volatile memory on any robot a XBee module is used which directly sends the data to the GUI wirelessly. This also saves space on the robot's memory.
-    \item Developed a GUI to read the incoming data from the Robot. The GUI encrypts the data and sends it back to the server. The GUI is also capable of detecting is any changes were made to the file before sending it to the server.
-    \item Made a Robot using the Tiva board so as to check that our code and GUI are not restricted to only Fire Bird V.
+    \item Developed a GUI to read the incoming data from the Robot. The GUI encrypts the data and sends it back to the server. The GUI is also capable of detecting if any changes were made to the file before sending it to the server.
+    \item Made a Robot using the Tiva board so as to check that our algorithm and GUI are not restricted to only Fire Bird V.
     \item Performed state collection on the newly developed robot.
 \newpage
 
@@ -526,7 +526,7 @@ The GUI is capable of reading the incoming data from the XBee module. We use a s
 \subsection{Steps for merging the State Collection Code with User's Code for Fire Bird V}
 \begin{enumerate}
 
-\item include "common\_header.h" in User' Code
+\item include "state\_collect.h" in User' Code
 
 \item In main after initialising all the devices call the function  "\_init\_devices()"
 

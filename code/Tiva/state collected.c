@@ -25,7 +25,6 @@ int main(void)
 	start_collection();
 
 	motor_pin_cofig();
-	sensor_pin_config();
 	uart_pin_config();
 	buzzer_pin_config();
 	while(1)

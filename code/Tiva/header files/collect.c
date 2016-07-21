@@ -32,6 +32,6 @@ void start_collection()
 		TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);		// Enables a specific event within the timer to generate an interrupt.
 		IntMasterEnable();                      		        // Master interrupt enable
 		TimerEnable(TIMER0_BASE, TIMER_A);				// Enable the TIMER_A of TIMER0 module.
-
+		sensor_pin_config();
 }
 

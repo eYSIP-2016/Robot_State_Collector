@@ -57,7 +57,6 @@
 
 #define __OPTIMIZE__ -O0
 #define F_CPU 14745600
-#include "common_header.h"
 #include "state_collect.h"//header file required to collect the state data
 
 #include "lcd.h"
