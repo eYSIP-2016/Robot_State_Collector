@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.5.24)  21 JUL 2016 17:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.5.24)  21 JUL 2016 18:49
 entering extended mode
 **"C:/Users/Amanpreet Singh/Documents/e Yantra/Robot State Collector/Robot_Stat
 e_Collector/Documentation/report_eYSIP/Robot_State_Collector.tex"
@@ -1223,10 +1223,10 @@ File: whiteline.png Graphic file (type png)
 Package pdftex.def Info: whiteline.png used on input line 199.
 (pdftex.def)             Requested size: 153.57446pt x 131.17818pt.
 
-<sharp.jpg, id=231, 169.38281pt x 164.11313pt>
-File: sharp.jpg Graphic file (type jpg)
- <use sharp.jpg>
-Package pdftex.def Info: sharp.jpg used on input line 206.
+<Sharp.jpg, id=231, 169.38281pt x 164.11313pt>
+File: Sharp.jpg Graphic file (type jpg)
+ <use Sharp.jpg>
+Package pdftex.def Info: Sharp.jpg used on input line 206.
 (pdftex.def)             Requested size: 135.50642pt x 131.29066pt.
 
 <caster.jpg, id=232, 803.0pt x 682.55pt>
@@ -1243,7 +1243,7 @@ File: logo.png Graphic file (type png)
 <use logo.png>
 Package pdftex.def Info: logo.png used on input line 215.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
- [7 <./lcd.png> <./whiteline.png> <./sharp.jpg>]
+ [7 <./lcd.png> <./whiteline.png> <./Sharp.jpg>]
 <lm.jpg, id=246, 80.3pt x 80.3pt>
 File: lm.jpg Graphic file (type jpg)
  <use lm.jpg>
@@ -1454,10 +1454,10 @@ File: caster_whiteline.jpg Graphic file (type jpg)
 Package pdftex.def Info: caster_whiteline.jpg used on input line 413.
 (pdftex.def)             Requested size: 154.17915pt x 205.5722pt.
 
-<a_sharp.jpg, id=357, 1284.8pt x 963.6pt>
-File: a_sharp.jpg Graphic file (type jpg)
- <use a_sharp.jpg>
-Package pdftex.def Info: a_sharp.jpg used on input line 420.
+<a_Sharp.jpg, id=357, 1284.8pt x 963.6pt>
+File: a_Sharp.jpg Graphic file (type jpg)
+ <use a_Sharp.jpg>
+Package pdftex.def Info: a_Sharp.jpg used on input line 420.
 (pdftex.def)             Requested size: 205.5722pt x 154.17915pt.
 File: logo.png Graphic file (type png)
  <use logo.png>
@@ -1468,7 +1468,7 @@ File: logo.png Graphic file (type png)
 <use logo.png>
 Package pdftex.def Info: logo.png used on input line 423.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
- [18 <./caster_whiteline.jpg> <./a_sharp.jpg>]
+ [18 <./caster_whiteline.jpg> <./a_Sharp.jpg>]
 <buzzer.jpg, id=368, 963.6pt x 1284.8pt>
 File: buzzer.jpg Graphic file (type jpg)
  <use buzzer.jpg>
@@ -1644,8 +1644,8 @@ Package rerunfilecheck Info: File `Robot_State_Collector.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 615.
  ) 
 Here is how much of TeX's memory you used:
- 29993 strings out of 493634
- 608519 string characters out of 3131157
+ 29994 strings out of 493634
+ 608524 string characters out of 3131157
  683572 words of memory out of 3000000
  32766 multiletter control sequences out of 15000+200000
  11201 words of font info for 40 fonts, out of 3000000 for 9000
@@ -1661,7 +1661,7 @@ s/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/Amanpreet Singh/AppData/Local/Pr
 ograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Amanpreet
  Singh/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.
 pfb>
-Output written on Robot_State_Collector.pdf (30 pages, 3245054 bytes).
+Output written on Robot_State_Collector.pdf (30 pages, 3245043 bytes).
 PDF statistics:
  543 PDF objects out of 1000 (max. 8388607)
  169 named destinations out of 1000 (max. 500000)
