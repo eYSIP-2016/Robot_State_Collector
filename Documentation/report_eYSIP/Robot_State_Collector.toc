@@ -9,7 +9,7 @@
 \contentsline {subsection}{\numberline {1.5.2}Tiva Robot}{13}{subsection.1.5.2}
 \contentsline {subsection}{\numberline {1.5.3}Steps for Assembling Tiva Robot}{19}{subsection.1.5.3}
 \contentsline {section}{\numberline {1.6}Software and Code}{25}{section.1.6}
-\contentsline {subsection}{\numberline {1.6.1}Sate Collection Code for Fire Bird V Robot}{25}{subsection.1.6.1}
+\contentsline {subsection}{\numberline {1.6.1}State Collection Algorithm}{25}{subsection.1.6.1}
 \contentsline {subsection}{\numberline {1.6.2}Client GUI and Server}{25}{subsection.1.6.2}
 \contentsline {section}{\numberline {1.7}Use and Demo}{26}{section.1.7}
 \contentsline {subsection}{\numberline {1.7.1}Steps for merging the State Collection Code with User's Code for Fire Bird V}{26}{subsection.1.7.1}

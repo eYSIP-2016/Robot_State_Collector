@@ -8,7 +8,7 @@
 \BOOKMARK [2][-]{subsection.1.5.2}{Tiva Robot}{section.1.5}% 8
 \BOOKMARK [2][-]{subsection.1.5.3}{Steps for Assembling Tiva Robot}{section.1.5}% 9
 \BOOKMARK [1][-]{section.1.6}{Software and Code}{chapter.1}% 10
-\BOOKMARK [2][-]{subsection.1.6.1}{Sate Collection Code for Fire Bird V Robot}{section.1.6}% 11
+\BOOKMARK [2][-]{subsection.1.6.1}{State Collection Algorithm}{section.1.6}% 11
 \BOOKMARK [2][-]{subsection.1.6.2}{Client GUI and Server}{section.1.6}% 12
 \BOOKMARK [1][-]{section.1.7}{Use and Demo}{chapter.1}% 13
 \BOOKMARK [2][-]{subsection.1.7.1}{Steps for merging the State Collection Code with User's Code for Fire Bird V}{section.1.7}% 14
