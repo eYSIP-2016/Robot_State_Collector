@@ -7,16 +7,16 @@
 \contentsline {section}{\numberline {1.5}Assembly of Hardware}{13}{section.1.5}
 \contentsline {subsection}{\numberline {1.5.1}Fire Bird V Robot}{13}{subsection.1.5.1}
 \contentsline {subsection}{\numberline {1.5.2}Tiva Robot}{13}{subsection.1.5.2}
-\contentsline {subsection}{\numberline {1.5.3}Steps for Assembling Tiva Robot}{17}{subsection.1.5.3}
-\contentsline {section}{\numberline {1.6}Software and Code}{23}{section.1.6}
-\contentsline {subsection}{\numberline {1.6.1}Sate Collection Code for Fire Bird V Robot}{23}{subsection.1.6.1}
-\contentsline {subsection}{\numberline {1.6.2}Client GUI and Server}{23}{subsection.1.6.2}
-\contentsline {section}{\numberline {1.7}Use and Demo}{24}{section.1.7}
-\contentsline {subsection}{\numberline {1.7.1}Steps for merging the State Collection Code with User's Code for Fire Bird V}{24}{subsection.1.7.1}
-\contentsline {subsection}{\numberline {1.7.2}Steps for merging the State Collection Code with User's Code for Tiva Robot}{24}{subsection.1.7.2}
-\contentsline {subsection}{\numberline {1.7.3}Steps for Using the GUI}{24}{subsection.1.7.3}
-\contentsline {subsection}{\numberline {1.7.4}Steps for setting up the Server}{25}{subsection.1.7.4}
-\contentsline {section}{\numberline {1.8}Future Work}{26}{section.1.8}
-\contentsline {section}{\numberline {1.9}Bug Report and Challenges}{27}{section.1.9}
-\contentsline {subsection}{\numberline {1.9.1}Bugs}{27}{subsection.1.9.1}
-\contentsline {subsection}{\numberline {1.9.2}Challenges}{27}{subsection.1.9.2}
+\contentsline {subsection}{\numberline {1.5.3}Steps for Assembling Tiva Robot}{19}{subsection.1.5.3}
+\contentsline {section}{\numberline {1.6}Software and Code}{25}{section.1.6}
+\contentsline {subsection}{\numberline {1.6.1}Sate Collection Code for Fire Bird V Robot}{25}{subsection.1.6.1}
+\contentsline {subsection}{\numberline {1.6.2}Client GUI and Server}{25}{subsection.1.6.2}
+\contentsline {section}{\numberline {1.7}Use and Demo}{26}{section.1.7}
+\contentsline {subsection}{\numberline {1.7.1}Steps for merging the State Collection Code with User's Code for Fire Bird V}{26}{subsection.1.7.1}
+\contentsline {subsection}{\numberline {1.7.2}Steps for merging the State Collection Code with User's Code for Tiva Robot}{26}{subsection.1.7.2}
+\contentsline {subsection}{\numberline {1.7.3}Steps for Using the GUI}{26}{subsection.1.7.3}
+\contentsline {subsection}{\numberline {1.7.4}Steps for setting up the Server}{27}{subsection.1.7.4}
+\contentsline {section}{\numberline {1.8}Future Work}{28}{section.1.8}
+\contentsline {section}{\numberline {1.9}Bug Report and Challenges}{29}{section.1.9}
+\contentsline {subsection}{\numberline {1.9.1}Bugs}{29}{subsection.1.9.1}
+\contentsline {subsection}{\numberline {1.9.2}Challenges}{29}{subsection.1.9.2}

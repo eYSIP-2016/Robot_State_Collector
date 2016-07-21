@@ -95,70 +95,70 @@ contents={\includegraphics{logo}}
 \chapter[Robot State Collector]{Robot State Collector}
 \section{Abstract}
 
-\hspace{5mm}This project aims at developing a State Collection Algorithm which is easy to integrate with user code without interfering with it. Our code should be capable of collecting the sensor values, the buzzer and LCD data periodically. It should also send this data to the GUI developed for this specific purpose. The GUI should be able to encrypt the collected data and send it to the e-Yantra servers.
+\hspace{5mm}This project aims at developing a State Collection Code which is easy to merge with any code and doesn't interfere with the code already present in the Robot. Our code should be capable of sending the sensor values collected periodically to the GUI developed for this specific purpose which would be able to encrypt the collected data and send it to the e-Yantra servers.
 
-This would be helpful in virtually re-creating runs ,using the user's code and the data collected by us.
+This would be helpful in re-creating runs ,using the code and the data collected by us, virtually.
 
 The main tasks involved in the project are :
 
 \begin{enumerate}
 
     \item Collecting timed data about the state of the robot(sensors etc.).
+    \item Finding a way to efficiently storing data on the robot for a single run of the robot.
     \item Developing a GUI that picks up the data from the robot,encrypts it and send it to e-yantra servers.
-    \item Writing server side code to receive and decrypt the state information obtained from GUI developed in step 2.
 
 \end{enumerate}
 \newpage
 
-\section{Completion Status}
+\section{Completion status}
 
 \begin{enumerate}
 
-    \item Successfully collected the data on Fire Bird V and Tiva Robot using the specially developed State Collection Algorithm.
-    \item To avoid storing the data on the volatile memory on any robot a XBee module is used which directly sends the data to the GUI wirelessly. This also saves space on the robot's memory.
-    \item Developed a GUI to read the incoming data from the Robot. The GUI encrypts the data and sends it back to the server. The GUI is also capable of detecting if any changes were made to the file before sending it to the server.
-    \item Made a Robot using the Tiva board so as to check that our algorithm and GUI are not restricted to only Fire Bird V.
-    \item Performed state collection on the newly developed robot.
+    \item We have been able to collect the data on Firebird V after a particular time period (currently set as 0.5s).
+    \item To avoid storing the data on the volatile memory on any robot we are using a X-Bee module which directly sends the data to the GUI wirelessly and by doing so we even save space on the robot's memory.
+    \item We have developed a GUI to read the incoming data from the Robot , encrypt the data and send it back to the server. The GUI is also capable of detecting is any changes were made to the file before sending it to the server.
+    \item We have also made a Robot using the TIVA board so as to check that our code and GUI are not restricted to only Firebird V.
+    \item We have been able to perform state collection on the newly developed robot.
 \newpage
 
 \end{enumerate}
 
-\section{Hardware Parts Used}
+\section{Hardware parts used}
 
 \begin{itemize}
-  \item Hardware used with Fire Bird V :
+  \item Hardware used with FireBird V :
   \\
   \begin{figure}[h]
         \centering
         \includegraphics[scale=0.2]{firebird_V}
-        \caption{Fire Bird V with XBee module}
+        \caption{Firebird V with Xbee module}
       \end{figure}
 
   \begin{enumerate}
-    \item XBee Module.\\
+    \item X-Bee Module.\\
     \href{https://www.sparkfun.com/datasheets/Wireless/Zigbee/XBee-Datasheet.pdf}{ Datasheet}
     \begin{figure}[h]
         \centering
-        \includegraphics[scale=0.35]{XBee.jpg}
-        \caption{XBee module}
+        \includegraphics[scale=0.35]{xbee.jpg}
+        \caption{xbee module}
       \end{figure}
       \newpage
-    \item XBee Module and adapter to receive data on a Laptop/PC.\par
+    \item X-Bee Module and adapter to receive data on a Laptop/PC.\par
 
     \begin{figure}[!ht]
         \centering
         \includegraphics[scale=0.15]{adapter_board}
-        \caption{XBee with adapter connected to laptop}
+        \caption{Xbee with adapter connected to laptop}
       \end{figure}
   \end{enumerate}
 
-  \item Hardware used to build a Robot using Tiva board (TM4C123GXL)\\
+  \item Hardware used to build a Robot using TIVA board (TM4C123GXL)\\
   \href{http://www.ti.com.cn/cn/lit/ds/symlink/tm4c123gh6pm.pdf}{ Datasheet}\\
   \href{http://www.ti.com/lit/ug/spmu298a/spmu298a.pdff}{ Pheripheral Driver Library}\\
   \href{http://www.mouser.com/ds/2/405/spmu296-242111.pdf}{User's Guide}
   \begin{figure}[h]
         \centering
-        \includegraphics[scale=0.2]{Tiva}
+        \includegraphics[scale=0.2]{tiva}
         \caption{Tiva C Series TM4C123G LaunchPad}
       \end{figure}
        \newpage
@@ -171,7 +171,7 @@ The main tasks involved in the project are :
         \caption{DC Geared motor}
       \end{figure}
 
-    \item 2x Wheel - 65mm in Diameter.
+    \item 2x Wheel - 65mm.
     \begin{figure}[h]
         \centering
         \includegraphics[scale=0.22]{wheel}
@@ -199,12 +199,12 @@ The main tasks involved in the project are :
         \includegraphics[scale=0.85]{whiteline}
         \caption{3 Channel Whiteline Sensors}
       \end{figure}
-    \item Sharp 0A41SK sensor.\\
-    \href{http://www.Sharp-world.com/products/device/lineup/data/pdf/datasheet/gp2y0a41sk_e.pdf}{ Datasheet}\par
+    \item SHARP 0A41SK sensor.\\
+    \href{http://www.sharp-world.com/products/device/lineup/data/pdf/datasheet/gp2y0a41sk_e.pdf}{ Datasheet}\par
    \begin{figure}[!ht]
         \centering
-        \includegraphics[scale=0.8]{Sharp}
-        \caption{Sharp Sensor}
+        \includegraphics[scale=0.8]{sharp}
+        \caption{SHARP Sensor}
       \end{figure}
     \item Caster Wheel.
     \begin{figure}[!ht]
@@ -226,7 +226,7 @@ The main tasks involved in the project are :
         \caption{Heat Sink}
       \end{figure}
       \newpage
-    \item 10uF Electrolyte Capacitor.
+    \item 10 micro farad Electrolyte Capacitor.
     \begin{figure}[!ht]
         \centering
         \includegraphics[scale=0.35]{cap}
@@ -238,13 +238,13 @@ The main tasks involved in the project are :
         \includegraphics[scale=0.6]{pcb}
         \caption{PCB Board}
       \end{figure}
-\newpage
     \item 12V Rechargeable Battery.
     \begin{figure}[!h]
         \centering
         \includegraphics[scale=0.12]{battery}
         \caption{12V Rechargeable Battery}
       \end{figure}
+      \newpage
     \item 20 Pin Planar Cable.
     \begin{figure}[!h]
         \centering
@@ -280,15 +280,34 @@ The main tasks involved in the project are :
       \end{figure}
       \newpage
   \end{enumerate}
-
+  \item Hardware used with TIVA board Robot:
+   \begin{figure}[!ht]
+        \centering
+        \includegraphics[scale=0.13]{robot}
+        \caption{Robot}
+      \end{figure}
+  \begin{enumerate}
+    \item X-Bee Module.
+     \begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.2]{xbee.jpg}
+        \caption{xbee module}
+      \end{figure}
+    \item X-Bee Module and adapter to receive data on a Laptop/PC.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[scale=0.12]{adapter_board}
+        \caption{Xbee with adapter connected to laptop}
+      \end{figure}
+  \end{enumerate}
 \end{itemize}
 \newpage
-\section{Software Used}
+\section{Software used}
 \begin{itemize}
   \item Atmel Studio 6.0\\
-  \href{http://www.atmel.com/forms/software-download.aspx?target=tcm:26-41305}{ Download link}
+  \href{http://www.atmel.com/forms/software-download.aspx?target=tcm:26-41305}{ Download Here}
   \item XCTU-NG\\
-  \href{http://www.digi.com/products/XBee-rf-solutions/xctu-software/xctu}{ Download link}
+  \href{http://www.digi.com/products/xbee-rf-solutions/xctu-software/xctu}{ Download link}
   \item Serial Terminal\\
   \href{http://www.nex-robotics.com/images/downloads/Terminal\%20Setup.zip}{Download link}
   \item Code Composer Studio v6.1.3\\
@@ -297,299 +316,173 @@ The main tasks involved in the project are :
 
   \item NetBeans IDE 8.1\\
   \href{https://netbeans.org/downloads/}{Download link}
-  \item AVR Bootloader\\
+  \item AVR bootloader\\
   \href{http://www.nex-robotics.com/images/downloads/AVR\%20Boot\%20Loader.zip}{Download link}
 \end{itemize}
 \newpage
-\section{Assembly of Hardware}
-\subsection{Fire Bird V Robot}
-XBee module is attached with Fire Bird V Robot to transmit the collected state information.
+\section{Assembly of hardware}
+\subsection{Firebird V Robot}
+Xbee module is attached with Firebird V robot to collect it's state.
 \begin{figure}[h]
         \centering
-        \includegraphics[scale=0.19]{XBee_connected}
-        \caption{XBee connected with Fire Bird V}
+        \includegraphics[scale=0.19]{xbee_connected}
+        \caption{Xbee connected with firebird V}
       \end{figure}
-\subsection{Tiva Robot}
-
-   \begin{figure}[h]
-        \centering
-        \includegraphics[scale=0.8]{Tiva_pin}
-        \caption{Tiva Board Pin Location}
-      \end{figure}
-
+\subsection{Tiva robot}
 Connections of PORT pins of Tiva board with different components:\\
 \begin {enumerate}
 \item Interfacing of white line sensor
-\begin{center}
-	\begin{figure}[h]
-		\centering
-		\includegraphics[scale=1]{whiteline_pin}
-		\caption{Pin Configuration of White Line Sensor}
-	\end{figure}
-
- \begin{tabular}{| c | c |}
- 
- 	\hline
- 	\textbf{Tiva Port Pins} & \textbf{Sensors Pin}\\
- 
- 	\hline
- 	PE1 & 1\\
- 	\hline
- 	PE2 & 3\\
- 	\hline
- 	PE3 & 5 \\
- 	\hline
- 		VCC & 2\\
- 		\hline
- 			VCC & 4 \\
- 			\hline
- 				VCC & 6 \\
- 				\hline
- 	GND & 15\\
- 	\hline
- 		GND & 16\\
- 		\hline
- 			GND & 17\\
- 			\hline
- 	VCC & 19 \\
- 	\hline
- \end{tabular}
- \end{center}
-\item Interfacing of Sharp sensor\\
-\begin{center}
-\begin{tabular}{| c | c |}
-	\hline
-	\textbf{Tiva Port Pins} & \textbf{Sensor Pins}\\
-	\hline
-	PE0 & SIGNAL\\
-	\hline
-	GND & GND\\
-	\hline
-	VCC & VCC \\
-	\hline
-\end{tabular}
-\end{center}
-\newpage
-\item Interfacing of Motor Driver IC\\
-	\begin{figure}[h]
-		\centering
-		\includegraphics[scale=1]{MOTOR_DRIVER}
-		\caption{Pin Configuration of Motor Driver IC}
-	\end{figure}
-	\begin{center}
-\begin{tabular}{| c | c |}
-	\hline
-	\textbf{Tiva Port Pins} & \textbf{L293D Pins}\\
-	\hline
-	PE4 & PWM1\\
-	\hline
-	PA2 & INPUT1\\
-	\hline
-	PA3 & INPUT2 \\
-	\hline
-	GND & GND\\
-	\hline
-	VCC & VCC \\
-	\hline
-	PE5 & PWM2 \\
-	\hline
-	PA6 & INPUT3\\
-	\hline
-	PA7 & INPUT4 \\
-	\hline
-	VBUS & VREF \\
-	\hline
-\end{tabular}
-\end{center}
-\newpage
-\item Interfacing of XBee module\\
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=1]{XBee}
-	\caption{Pin Configuration of XBee Socket}
-\end{figure}
-\begin{center}
-\begin{tabular}{| c | c |}
-	\hline
-	\textbf{Tiva Port Pins} & \textbf{XBee Pins}\\
-	\hline
-	PC4 & DOUT\\
-	\hline
-	PC5 & DIN\\
-	\hline
-	GND & GND\\
-	\hline
-	VCC & VCC \\
-	\hline
-\end{tabular}
-\end{center}
+\begin{itemize}
+\item PE1  - LEFT   SENSOR
+\item PE2  - CENTER SENSOR
+\item PE3  - RIGHT  SENSOR
+\item GND  - GND
+\item VCC  - VCC
+\end{itemize}
+\item Interfacing of Sharp sensor
+\begin{itemize}
+\item PE0  - Sharp   SENSOR
+\item GND  - GND
+\item VCC  - VCC
+\end{itemize}
+\item Interfacing of Motor Driver IC
+\begin{itemize}
+\item PE4  - PWM1
+\item PA2  - IN1
+\item PA3  - IN2
+\item GND  - GND
+\item VCC  - VCC
+\item PE5  - PWM2
+\item PA6  - IN3
+\item PA7  - IN4
+\end{itemize}
+\item Interfacing of X-Bee module
+\begin{itemize}
+\item PC4  - Rx
+\item PC5  - Tx
+\item GND  - GND
+\item VCC  - VCC
+\end{itemize}
 \item Interfacing of Buzzer
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=1]{speaker}
-	\caption{Pin Configuration of Buzzer}
-\end{figure}
-\begin{center}
-	\begin{tabular}{| c | c |}
-		\hline
-		\textbf{Tiva Port Pins} & \textbf{Buzzer Pins}\\
-		\hline
-		PF0 & B1\\
-		\hline
-		GND & GND\\
-		\hline
-	\end{tabular}
-\end{center}
-\newpage
+\begin{itemize}
+\item PF0  - Signal
+\item GND  - GND
+\end{itemize}
 \item Interfacing of LCD
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.5]{lcd_pin}
-	\caption{Pin Configuration of LCD Display}
-\end{figure}
-\begin{center}
-	\begin{tabular}{| c | c |}
-		\hline
-		\textbf{Tiva Port Pins} & \textbf{LCD Pins}\\
-		\hline
-		GND & GND\\
-		\hline
-		VCC & Vcc\\
-		\hline
-		GND & VEE \\
-		\hline
-		PA4 & RS\\
-		\hline
-		PA5 & R/W \\
-		\hline
-		PC6 & EN \\
-		\hline
-		PB0 & DB0\\
-		\hline
-		PB1 & DB1 \\
-		\hline
-		PB2 & DB2\\
-		\hline
-		PB3 & DB3 \\
-		\hline
-		PB4 & DB4 \\
-		\hline
-		PB5 & DB5 \\
-		\hline
-		PB6 & DB6 \\
-		\hline
-		PB7 & DB7 \\
-		\hline
-			VCC & Led+ \\
-			\hline
-				GND & Led- \\
-				\hline
-	\end{tabular}
-\end{center}
+\begin{itemize}
+\item PB0  - DATA 0
+\item PB1  - DATA 1
+\item PB2  - DATA 2
+\item PB3  - DATA 3
+\item PB4  - DATA 4
+\item PB5  - DATA 5
+\item PB6  - DATA 6
+\item PB7  - DATA 7
+\item GND  - GND
+\item VCC  - VCC
+\item VEE  - GND
+\item VCC  - Led+
+\item GND  - Led-
+\item PA4  - RS
+\item PA5  - RW
+\item PC6  - EN
+\end{itemize}
 \end{enumerate}
-\newpage
 \subsection*{Block Diagram}
-Basic connections of different components used with Tiva Robot.
+Basic connections different components of Tiva robot.
 \\
 \begin{figure}[h]
         \centering
-        \includegraphics[scale=0.7]{Block}
-        \caption{Block Diagram of Tiva Robot}
+        \includegraphics[scale=0.9]{Block}
+        \caption{Block diagram of Tiva robot}
       \end{figure}
-\subsection*{Voltage Regulator Circuit Diagram}
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.7]{Voltage_Regulator_Circuit}
-	\caption{Circuit Diagram of Voltage Regulator Circuit}
-\end{figure}
-
       \newpage
-\subsection{Steps for Assembling Tiva Robot}
+\subsection{Steps for assembling Tiva robot}
 \begin{enumerate}
-\item Gather/Buy all the components to be used for building the Robot.
+\item All the components.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{all_components}
-        \caption{All the components used to build the Robot.}
+        \caption{All the components used to build the bot.}
       \end{figure}
-\item Assemble the chassis, two dc geared motors and two wheels.Then conect the motors with the Motor Driver IC.
+\item Chassis,two dc geared motors \& two wheels are assembled and the wheels are connected with the motor driver IC.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{motor_2_ic}
         \caption{Motors and wheels attached to chassis}
       \end{figure}
       \newpage
-\item Connect the White Line sensors and Caster wheel to the chassis.
+\item Whiteline sensors and Caster wheel is connected to the chassis.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{caster_whiteline}
-        \caption{Caster Wheel and White Line Sensors attached to chassis}
+        \caption{Caster Wheel and Whiteline Sensors attached to chassis}
       \end{figure}
 
-\item AttachSharp Sensor to the chassis.
+\item Sharp Sensor is attached to the chassis.
 \begin{figure}[h]
         \centering
-        \includegraphics[scale=0.16]{a_Sharp}
-        \caption{Sharp Sensor attached to chassis}
+        \includegraphics[scale=0.16]{a_sharp}
+        \caption{SHARP Sensor attached to chassis}
       \end{figure}
       \newpage
 
-\item Attach the Buzzer to the PCB board. Using the male bug strips (4x10) desgin a PCB board to which the Tiva board will be attached.
+\item Buzzer is attached to the PCB board designed on which TIVA board would fit and attached to the chassis.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{buzzer}
-        \caption{Buzzer which would be beneath the Tiva board}
+        \caption{Buzzer which would be beneath the TIVA board}
       \end{figure}
-\item Attach Tiva board (TM4C123GXL) on the PCB board.
+\item TIVA board (TM4C123GXL) is attached on the PCB board.
 \begin{figure}[h]
         \centering
-        \includegraphics[scale=0.13]{Tiva_attatched}
-        \caption{Tiva board fitted}
+        \includegraphics[scale=0.13]{tiva_attatched}
+        \caption{TIVA board fitted}
       \end{figure}
     \newpage
 
-\item Connect White Line Sensors using the 20 pin connector.
+\item Whiteline Sensors are connected using the 20 pin connector.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{wh_attatched}
-        \caption{Whiteline Sensors are now connected to the Tiva board.}
+        \caption{Whiteline Sensors are now connected to the TIVA board.}
       \end{figure}
 
-\item Connect Sharp Sensor and Motor Driver IC to the Tiva board.
+\item SHARP Sensor and Motor Driver IC are connected to the TIVA board.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{all_connected}
-        \caption{Sharp Sensor and Motor Driver IC are now connected to the Tiva board.}
+        \caption{SHARP Sensor and Motor Driver IC are now connected to the TIVA board.}
       \end{figure}
       \newpage
 
-\item Conenct the LCD to the Tiva board.
+\item LCD is now connected to the TIVA board.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{lcd_a}
-        \caption{LCD after being attached to the Robot.}
+        \caption{LCD after being attached to the bot.}
       \end{figure}
 
-\item Connect the XBee to the Tiva board.
+\item X-Bee is now connected to the TIVA board.
 \begin{figure}[h]
         \centering
-        \includegraphics[scale=0.16]{XBee_a}
-        \caption{XBee after being attached to the Robot.}
+        \includegraphics[scale=0.16]{xbee_a}
+        \caption{X-bee after being attached to the bot.}
       \end{figure}
       \newpage
 
-\item Connect the Voltage Regulator Circuit and Battery to the Tiva board.
+\item Voltade Regulator Circuit and Battery are now connected to the TIVA board.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{battery_a}
-        \caption{ Voltage Regulator Circuit and Battery  after being attached to the Robot}
+        \caption{Power can now be supplied to the bot.}
       \end{figure}
 
-\item Now all the Components are attahced to the Robot.
+\item Finally the Bot is Ready for use.
 \begin{figure}[h]
         \centering
         \includegraphics[scale=0.16]{robot}
-        \caption{Tiva Robot.}
+        \caption{TIVA BOT.}
       \end{figure}
     \newpage
 \end{enumerate}
@@ -597,77 +490,62 @@ Basic connections of different components used with Tiva Robot.
 \newpage
 \section{Software and Code}
 \href{https://github.com/eYSIP-2016/Robot_State_Collector/tree/master/code}{Github link} for the repository of code
-\subsection{Sate Collection Code for Fire Bird V Robot}
-We use a specific Timer to generate an interrupt after 0.5s. Whenever the interrupt occurs, the state information(i.e. values of all sensors etc.) is collected and transmitted wirelessly to the PC/Laptop via XBee.\\
-    Our code is entirely inside the provided header file. A simple function call starts the State Collection.\\
-\\
-The specific timers used by us to collect the state data for different Robots are as follows:
-\begin{itemize}
-\item For Fire Bird V -- Timer 4
-\item For Tiva Robot - Timer0A
-\end{itemize}
+\subsection{Sate Collection code For Firebird V Robot}
+We are using Timer4 to generate an interrupt after 0.5s. Using this interrupt we can send the present values of the sensors to the GUI.\\
+    Our code is entirely inside the provided header file. A simple function call starts the State Collection.
 
-NOTE: The Timer used by us cannot be used by the user. 
+\subsection{Sate Collection code For TIVA Robot}
+    We are using Timer0A to generate an interrupt after 0.5s. Using this interrupt we can send the present values of the sensors to the GUI.\\
+    Our code is entirely inside the provided header file. A simple function call starts the State Collection.
 
-\subsection{Client GUI and Server}
+\subsection{GUI}
 
-The GUI is capable of reading the incoming data from the XBee module. We use a symmetric key encryption scheme to encrypt the collected the state data. The key of the symmetric key encryption scheme is encrypted using a public key encryption scheme. At the end the encrypted data can be sent to the server if the user wishes.
+The GUI is capable of reading the incoming data on the X-Bee module. The data is stored and on a press of a button it gets encrypted using a symmetric key algorithm , the key of this symmetric key algorithm is encrypted using the public key provided to the user. At the end the encrypted data can be sent to the server if the user wishes.
 
 \newpage
 
 \section{Use and Demo}
 
-\subsection{Steps for merging the State Collection Code with User's Code for Fire Bird V}
+\subsection{Steps for merging the State Collection Code with User's Code for Firebird V}
 \begin{enumerate}
 
+\item include "common\_header.h" in User' Code
 \item include "state\_collect.h" in User' Code
 
 \item In main after initialising all the devices call the function  "\_init\_devices()"
 
 \end{enumerate}
 
+State Collection will now take place with the User's Code.\\
 
 NOTE : The files included above should be present inside the same folder as that of the User's code.
 
-\subsection{Steps for merging the State Collection Code with User's Code for Tiva Robot}
+\subsection{Steps for merging the State Collection Code with User's Code for TIVA bot}
 \begin{enumerate}
 
 \item include "common\_header.h" in User' Code
-
-\item In main call the function  "start\_collection()".
+\item include "collect.c in User' Code
+\item include "sensor.c in User' Code
+\item In main call the function  "start\_collection()" and "sensor\_pin\_config".
 
 \end{enumerate}
 
+State Collection will now take place with the User's Code.\\
 
 NOTE : The files included above should be present inside the same folder as that of the User's code.
 
-\subsection{Steps for Using the GUI}
+\subsection{Steps for using the GUI}
 \begin{enumerate}
 
 \item Login with the credentials provided.
-\item Make sure that the XBee adapter is connected to the laptop.
+\item Make sure that the X-Bee adapter is connected to the laptop.
 \item Click on the "Search for available COM ports " button.
-\item From the Drop Down Menu select the COM port on which the XBee adapter is connected. Selecting the COM port would establish a connection with the XBee and the "Not connected" would change to "Connected".
-\item After the run is complete click on "End of Run" button to indicate the end of the robot's task.
+\item From the Drop Down Menu select the COM port on which the X-Bee adapter is connected. Selecting the COM port would establish a connection with the X-Bee and the "Not connected" would change to "Connected".
+\item After the run is complete Click on "End of Run" button to indicate the end of the robot's task.
 \item To send the data to the server click on "Connect to the Server" button.
 \item To disconnect from the COM port press the "Disconnect" button.
 
 \end{enumerate}
-
-\subsection{Steps for setting up the Server}
-\begin{enumerate}
-
-\item Make a Java project and copy the contents of Server Side code,"decp.java", in the main class. 
-\item In the same folder as that of your project files listed below should be present.
-	\begin{itemize} 
-		\item "keyStoreName.jceks"
-		\item "ip.txt"
-	\end{itemize} 
-\item Now Run the Java program and the server is now started.  
-\item To generate a new Private and Public key Pair just run the code within "Generation of Private and Public Key.java". And then just provide the newly generated "publicKey.txt".
-
-\end{enumerate}
-
 
 \newpage
 
@@ -676,43 +554,45 @@ NOTE : The files included above should be present inside the same folder as that
 \begin{enumerate}
 
 \item LCD data can be collected.
-\item Position encoders can be configured with the Tiva Bot.
+\item Server Side Code can be improved such that it shouldn't have to be restarted after each run.
+\item Position encoders can be configured with the TIVA Bot.
 
 \end{enumerate}
 
 \newpage
 
-\section{Bug Report and Challenges}
+\section{Bug report and Challenges}
 
-\subsection{Bugs}
+\subsection{Bugs:}
 
 
 \begin{enumerate}
 
-\item XBee doesn't run at baud rate of 115200 on Fire Bird V.
-\item XBee doesn't run at baud rate of 9600 on Tiva bot.
-\item If we change the frequency of the system clock on Tiva bot the XBee doesn't work.
+\item X-Bee doesn't run at baud rate of 115200 on Firebird V.
+\item X-Bee doesn't run at baud rate of 9600 on TIVA bot.
+\item If we change the frequency of the system clock on TIVA bot the X-Bee doesn't work.
+\item Java code at server side stops after each run.
 \item If we have to collect data of the position encoders then it has to be done with the interrupt used by the user and hence we have to change the user's code a bit.
 \item The server side code hasn't been tested with multiple clients.
 \item The server would give an error if the user logs in and closes the GUI without sending the data.
 \item We don't know what would happen if connection between the client and the server is lost while transmitting the data.
 \item There would be a loss of data if the user presses the Disconnect button while the GUI is collecting the State data.
-\item On Tiva board no formula for conversion of digital values of Sharp sensor to actual distance has been used as Tiva board has a 12 bit ADC channel and all the formulas we found were meant for 8 bit ADC channels.
+\item On TIVA board no formula for conversion of digital values of SHARP sensor to actual distance has been used as TIVA board has a 12 bit ADC channel and all the formulas we found were meant for 8 bit ADC channels.
 
 \end{enumerate}
 
-\subsection{Challenges}
+\subsection{Challenges:}
 
 \begin{enumerate}
 
-\item Storing the Data efficiently on the Robot's memory -- This was avoided by sending the data using a XBee module.
+\item Storing the Data efficiently on the bot's memory -- This was avoided by sending the data using a X-Bee module.
 \item We were first transmitting the data as soon as it was read. This caused a problem as the earlier data was not sent and the new data arrived which caused them to overlap and hence resulted in loss of information -- This was solved by waiting for the previous data to be sent first and then sending the new data.
 \item Encryption without using any padding as the data size was not a multiple of 16 bytes and hence the AES encryption algorithm would fail -- This was solved by using a padding which ensures that the data is always a multiple of 16 bytes.
-\item Sending the data in a integer format using XBee module -- This was solved by digitising the integer and then sending it.
+\item Sending the data in a integer format using X-Bee module -- This was solved by digitising the integer and then sending it.
 \item Sending the data in a string form over Java Sockets -- This was solved by converting the strings to byte arrays and then sending them.
-\item Power when provided directly at VBUS of the TM4C123GXL it would cause the robot to restart -- The cause of the problem could not be determined. However the problem vanished automatically after two days.
-\item Motor Driver IC would not run from the 5V coming from the Tiva board -- The cause of the problem could not be determined. However the problem vanished automatically during testing.
-\item The PIN PF0 was locked and we were unaware of this fact and tried using this port like any other pin -- After a lot of research on the web we found how to unlock the pins.
+\item Power when provided directly at VBUS of the TM4C123GXL it would cause the robot to restart -- This problem disappeared after 2 days.
+\item Motor Driver IC would not run from the 5V coming from the TIVA board -- This problem disappeared during testing.
+\item The PIN PF0 was locked and we were unaware of this fact and tried using this port like any other pin -- After a lot of research on the web we found how to unlock the PINS.
 
 \end{enumerate}
 
