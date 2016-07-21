@@ -94,8 +94,8 @@ contents={\includegraphics{logo}}
 
 \chapter[Robot State Collector]{Robot State Collector}
 \section{Abstract}
-t
-\hspace{5mm}This project aims at developing a State Collection Algorithm which is easy to integrate with user code without interfering with it. Our code should be capable of collecting the sensor values and even the buzzer and LCD data periodically. It should also send this data to the GUI developed for this specific purpose. The GUI should be able to encrypt the collected data and send it to the e-Yantra servers.
+
+\hspace{5mm}This project aims at developing a State Collection Algorithm which is easy to integrate with user code without interfering with it. Our code should be capable of collecting the sensor values, the buzzer and LCD data periodically. It should also send this data to the GUI developed for this specific purpose. The GUI should be able to encrypt the collected data and send it to the e-Yantra servers.
 
 This would be helpful in virtually re-creating runs ,using the user's code and the data collected by us.
 
@@ -114,7 +114,7 @@ The main tasks involved in the project are :
 
 \begin{enumerate}
 
-    \item Successfully collected the data on Fire Bird V and Tiva bot using the specially developed State Collection Algorithm.
+    \item Successfully collected the data on Fire Bird V and Tiva Rofbot using the specially developed State Collection Algorithm.
     \item To avoid storing the data on the volatile memory on any robot we are using a XBee module which directly sends the data to the GUI wirelessly and by doing so we even save space on the robot's memory.
     \item Developed a GUI to read the incoming data from the Robot. The GUI encrypts the data and sends it back to the server. The GUI is also capable of detecting is any changes were made to the file before sending it to the server.
     \item Made a Robot using the Tiva board so as to check that our code and GUI are not restricted to only Fire Bird V.
@@ -535,7 +535,7 @@ The GUI is capable of reading the incoming data from the XBee module. We use a s
 
 NOTE : The files included above should be present inside the same folder as that of the User's code.
 
-\subsection{Steps for merging the State Collection Code with User's Code for Tiva bot}
+\subsection{Steps for merging the State Collection Code with User's Code for Tiva Robot}
 \begin{enumerate}
 
 \item include "common\_header.h" in User' Code

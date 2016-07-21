@@ -13,7 +13,7 @@
 \contentsline {subsection}{\numberline {1.6.2}Client GUI and Server}{24}{subsection.1.6.2}
 \contentsline {section}{\numberline {1.7}Use and Demo}{25}{section.1.7}
 \contentsline {subsection}{\numberline {1.7.1}Steps for merging the State Collection Code with User's Code for Fire Bird V}{25}{subsection.1.7.1}
-\contentsline {subsection}{\numberline {1.7.2}Steps for merging the State Collection Code with User's Code for Tiva bot}{25}{subsection.1.7.2}
+\contentsline {subsection}{\numberline {1.7.2}Steps for merging the State Collection Code with User's Code for Tiva Robot}{25}{subsection.1.7.2}
 \contentsline {subsection}{\numberline {1.7.3}Steps for Using the GUI}{25}{subsection.1.7.3}
 \contentsline {subsection}{\numberline {1.7.4}Steps for setting up the Server}{26}{subsection.1.7.4}
 \contentsline {section}{\numberline {1.8}Future Work}{27}{section.1.8}
