@@ -1,0 +1,125 @@
+\documentclass[a4paper,12pt,oneside]{book}
+
+%-------------------------------Start of the Preable------------------------------------------------
+\usepackage[english]{babel}
+\usepackage{blindtext}
+%packagr for hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\urlstyle{same}
+%use of package fancy header
+\usepackage{fancyhdr}
+\setlength\headheight{26pt}
+\fancyhf{}
+%\rhead{\includegraphics[width=1cm]{logo}}
+\lhead{\rightmark}
+\rhead{\includegraphics[width=1cm]{logo}}
+\fancyfoot[RE, RO]{\thepage}
+\fancyfoot[CE, CO]{\href{http://www.e-yantra.org}{www.e-yantra.org}}
+
+\pagestyle{fancy}
+
+%use of package for section title formatting
+\usepackage{titlesec}
+\titleformat{\chapter}
+  {\Large\bfseries} % format
+  {}                % label
+  {0pt}             % sep
+  {\huge}           % before-code
+ 
+%use of package tcolorbox for colorful textbox
+\usepackage[most]{tcolorbox}
+\tcbset{colback=cyan!5!white,colframe=cyan!75!black,halign title = flush center}
+
+\newtcolorbox{mybox}[1]{colback=cyan!5!white,
+colframe=cyan!75!black,fonttitle=\bfseries,
+title=\textbf{\Large{#1}}}
+
+%use of package marginnote for notes in margin
+\usepackage{marginnote}
+
+%use of packgage watermark for pages
+%\usepackage{draftwatermark}
+%\SetWatermarkText{\includegraphics{logo}}
+\usepackage[scale=2,opacity=0.1,angle=0]{background}
+\backgroundsetup{
+contents={\includegraphics{logo}}
+}
+
+%use of newcommand for keywords color
+\usepackage{xcolor}
+\newcommand{\keyword}[1]{\textcolor{red}{\textbf{#1}}}
+
+%package for inserting pictures
+\usepackage{graphicx}
+
+%package for highlighting
+\usepackage{color,soul}
+
+%new command for table
+\newcommand{\head}[1]{\textnormal{\textbf{#1}}}
+
+
+%----------------------End of the Preamble---------------------------------------
+
+
+\begin{document}
+
+%---------------------Title Page------------------------------------------------
+\begin{titlepage}
+\raggedright
+{\Large eYSIP2016\\[1cm]}
+{\Huge\scshape Robot State Collector \\[.1in]}
+\vspace*{\fill}
+\begingroup
+\centering
+
+\Large \textbf{Security Document}
+
+\endgroup
+\vspace*{\fill}
+\begin{flushright}
+{\large Amanpreet Singh \\}
+{\large Amit Raushan \\}
+{\large Shubham Gupta \\}
+{\large Duration of Internship: $ 10/06/2016-24/07/2016 $ \\}
+\end{flushright}
+
+{\itshape 2016, e-Yantra Publication}
+\end{titlepage}
+%-------------------------------------------------------------------------------
+
+\chapter[Project Tag]{List of all the Security Features}
+
+\begin{itemize}
+    \item \textbf{Authentication:} Only the users with valid login credentials can send the data collected by the GUI to the servers.
+    \item \textbf{Data Integrity:} To check if any modifications have been made to the text file containing the data in between the time of file generation and sending that file to the server, we first generate the checksum on the client side while creating the file. This  checksum is the first thing to be sent to the server. Once the collected data is sent to the server another checksum is generated, this time at the server side. These two generated checksums can be matched to verify the Data Integrity.
+    \item \textbf{Confidentiality:} The State data is encrypted using \href{https://en.wikipedia.org/wiki/Advanced_Encryption_Standard_process}{AES}, which is a symmetric key encryption algorithm. The 128 bit key of this symmetric key encryption is generated randomly at the client side and is encrypted using 1024 bit public key of \href{https://en.wikipedia.org/wiki/RSA_(cryptosystem)}{RSA}, which is a asymmetric key encryption algorithm. The corresponding Private key is already available at the server side and hence we can recover the \href{https://en.wikipedia.org/wiki/Advanced_Encryption_Standard_process}{AES} key. Now this \href{https://en.wikipedia.org/wiki/Advanced_Encryption_Standard_process}{AES} key can be used to decrypt the data.
+
+\end{itemize}
+
+\newpage
+
+\chapter[Project Tag]{Steps followed to maintain all the Security Features}
+
+\begin{enumerate}
+
+\item State Information is collected and then encrypted before storing it on the disk.
+\item Login credentials are verified by the server.
+\item Checksum of the encrypted file is sent to the server. This checksum was calculated as soon as the file was written to the disk.
+\item Then the randomly generated encrypted AES symmetric key is sent using Public Key.
+\item The data encrypted with shared key is sent to the server.
+\item The checksum is generated for the received data at the server side. Only if this checksum matches with the checksum recieved in step 3, further process takes place.
+\item Server decrypts the recieved encrypted shared key using its Private Key.
+\item The State Data is obtained by decrypting the recieved data using this shared key.
+
+\end{enumerate}
+
+\end{document}
+
