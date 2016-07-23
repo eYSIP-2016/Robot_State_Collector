@@ -22,7 +22,7 @@ int main(void)
 {
 	SysCtlClockSet(SYSCTL_SYSDIV_4|SYSCTL_USE_PLL|SYSCTL_XTAL_16MHZ|SYSCTL_OSC_MAIN);
 
-	start_collection();
+	_start_collection();
 
 	motor_pin_cofig();
 	uart_pin_config();

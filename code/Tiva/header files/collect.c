@@ -15,14 +15,14 @@ void Timer0IntHandler(void)
 
 
 /*
-* Function Name: start_collection()
+* Function Name: _start_collection()
 * Input: none
 * Output: none
 * Description: Starts the timer whose interrupt is used for sending the data through UART.
-* Example Call: start_collection();
+* Example Call: _start_collection();
 */
 
-void start_collection()
+void _start_collection()
 {
 		
 		SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);                   // Enable Timer 0 Clock

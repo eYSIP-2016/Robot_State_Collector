@@ -1,6 +1,7 @@
 
 import gnu.io.*;
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.KeyFactory;
 import java.security.PublicKey;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.swing.JOptionPane;
 
 
 /*
@@ -38,14 +40,14 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
     KeyGenerator keygenerator;                  // Variable for generating a Symmetric Key required for Encryption process.
     SecretKey myDesKey;                         // Variable for Storing the generated Symmetric Key 
     java.io.FileInputStream fis = null;         // Variable for reading data from files
-   
+    String md5;
     String ip;                                  // Variable for reading the ip address from "ip.txt" and using it throughout thr run.
     String id;                                  // Variable for storing the team_id incoming from the server.
     byte b[];                                   // Declaring a byte array which will be used as a buffer
 
     public test() {
         initComponents();
-        get_id();                               // To read team_id from the server
+        get_ip();                               // To read team_id from the server
     }
 
     /**
@@ -65,15 +67,17 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         jButton3 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("State Collection GUI");
-        setAlwaysOnTop(true);
         setAutoRequestFocus(false);
-        setBackground(new java.awt.Color(255, 102, 102));
+        setBackground(new java.awt.Color(0, 153, 153));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jButton1.setFont(new java.awt.Font("Viner Hand ITC", 0, 14)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jButton1.setText("Search for COM ports");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,13 +85,14 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
             }
         });
 
+        jComboBox1.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Viner Hand ITC", 0, 14)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jButton2.setText("DISCONNECT");
         jButton2.setToolTipText("");
         jButton2.setFocusable(false);
@@ -100,10 +105,10 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         });
 
         jLabel1.setBackground(new java.awt.Color(77, 25, 25));
-        jLabel1.setFont(new java.awt.Font("Viner Hand ITC", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel1.setText("      Not Connected");
 
-        jButton4.setFont(new java.awt.Font("Viner Hand ITC", 0, 14)); // NOI18N
+        jButton4.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jButton4.setText("End of run");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,7 +116,7 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Viner Hand ITC", 0, 14)); // NOI18N
+        jButton3.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jButton3.setText("Connect to Server");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,15 +125,29 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         });
 
         jLabel3.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel3.setFont(new java.awt.Font("Viner Hand ITC", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel2.setBackground(new java.awt.Color(204, 204, 255));
-        jLabel2.setFont(new java.awt.Font("Viner Hand ITC", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(51, 0, 51));
         jLabel2.setText("             Team ID:");
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jLabel2.setDebugGraphicsOptions(javax.swing.DebugGraphics.LOG_OPTION);
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 204));
+        jLabel4.setText("State Collection GUI");
+
+        jButton5.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jButton5.setText("Restart Run");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -138,23 +157,34 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
                 .addGap(78, 78, 78)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                                .addComponent(jButton3)))))
                 .addGap(98, 98, 98))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton2, jButton3, jLabel1});
@@ -164,7 +194,9 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(125, 125, 125)
+                .addGap(40, 40, 40)
+                .addComponent(jLabel4)
+                .addGap(71, 71, 71)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -173,13 +205,16 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
                     .addComponent(jLabel1)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addGap(95, 95, 95))
+                    .addComponent(jButton4)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, jComboBox1});
@@ -189,47 +224,113 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-   
-     /*
+       /*
+* Function Name: send_func()
+* Input: none
+* Output: none 
+* Description: Sends all the data to the server
+* Example Call: send_func();
+     */
+    
+    
+    public void send_func(){
+        try {
+                
+                get_id();
+                send_md5();
+                System.out.println(ip);                                                 // Printing the ip address on the console
+
+                Socket s = new Socket(ip, 2194);                                        // Opening a connection with the server.
+
+                read_file("AESKey.txt");                                                // Reads the contents of "AESKey.txt".
+
+                wr_2_server(s);                                                         // Writes the contents of "AESKey.txt" to the server.
+
+                System.out.println("Done");                                             // Writes "Done" on console.
+
+                read_file("output.txt");                                                // Reads the contents of "output.txt".
+
+                wr_2_server(s);                                                         // Writes the contents of "output.txt" to the server.
+
+            } catch (IOException ex) {
+                Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    
+    /*
+* Function Name: send_md5()
+* Input: none
+* Output: none 
+* Description: Sends md_5 checksum to the server.
+* Example Call: send_md5();
+     */
+    
+    void send_md5() throws UnsupportedEncodingException, IOException {
+
+        b = md5.getBytes("UTF-8");                                          // Converts the MD5 checksum into a byte array and stores it in the buffer.
+
+        Socket s = new Socket(ip, 2194);                                    // Opens a connection with the server.
+
+        wr_2_server(s);                                                     // Writes the data of buffer to the server.
+
+        s.close();                                                          // Closes the connection with the server.
+
+    }
+
+    
+    /*
 * Function Name: get_id()
 * Input: none
 * Output: none 
-* Description: Connects to the server and gets the team id.
+* Description: Gets the Team_id from server.
 * Example Call: get_id();
      */
     
-    void get_id(){
-        
-         try {
+    void get_id() throws IOException {
+
+        Socket s = new Socket(ip, 2194);                                    // Opens a connection to the server.
+
+        DataInputStream in = new DataInputStream(s.getInputStream());       // Creates an object to read from the server.
+        int len = in.readInt();                                             // Reads the integer coming from the server.
+        byte[] tm_id = new byte[len];                                       // Creates a byte array of the length coming from the server.
+        if (len > 0) {
+            in.readFully(tm_id, 0, tm_id.length);                           // Reads the complete data coming from the server.
+        }
+        id = new String(tm_id);                                             // Converts the byte array to string and stores it in the global variable id.
+
+        setTitle("State Collection GUI " + id);                             // Changes the title of the GUI to display the name and team id.
+
+        s.close();
+
+    }
+
+    /*
+* Function Name: get_ip()
+* Input: none
+* Output: none 
+* Description: Reads the ip from text file.
+* Example Call: get_ip();
+     */
+    void get_ip() {
+
+        try {
 
             read_file("ip.txt");                                                // Reads the contents of "ip.txt".
 
             ip = new String(b);                                                 // Converts the byte array to string and stores it in the global variable ip.
             System.out.println(ip);                                             // Displays the string ip on console.
 
-            Socket s = new Socket(ip, 2194);                                    // Opens a connection to the server.
-
-            DataInputStream in = new DataInputStream(s.getInputStream());       // Creates an object to read from the server.
-            int len = in.readInt();                                             // Reads the integer coming from the server.
-            byte[] tm_id = new byte[len];                                       // Creates a byte array of the length coming from the server.
-            if (len > 0) {  
-                in.readFully(tm_id, 0, tm_id.length);                           // Reads the complete data coming from the server.
-            }
-            id = new String(tm_id);                                             // Converts the byte array to string and stores it in the global variable id.
-
-            setTitle("State Collection GUI " + id);                             // Changes the title of the GUI to display the name and team id.
-
-            s.close();                                                          // Closes the connection with the server.
-
+            // Closes the connection with the server.
             jLabel3.setText(id);                                                // Displays the team id in a text field.
         } catch (FileNotFoundException ex) {
             Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
+
     /*
 * Function Name: read_file(String abc) 
 * Input: name of the file
@@ -259,42 +360,61 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         dOut.writeInt(b.length);                                                // write length of the message
         dOut.write(b);                                                          // write the message
     }
-    
-    
-     /*
+
+    /*
 * Function Name: update_file(byte[] xyz , String abc)
 * Input: Data , File Name.
 * Output: none 
 * Description: Writes the contents of xyz to the file mentioned.
 * Example Call: update_file(textEncrypted, "output.txt");
      */
-    
-    void update_file(byte[] xyz , String abc) throws FileNotFoundException, IOException{
-            FileOutputStream fos = new FileOutputStream(abc);                   // Opens the file abc for writing.
-            fos.write(xyz);                                                     // Writes the data xyz to the file abc.
-            fos.close();                                                        // Closes the file abc.
+    void update_file(byte[] xyz, String abc) throws FileNotFoundException, IOException {
+        FileOutputStream fos = new FileOutputStream(abc);                   // Opens the file abc for writing.
+        fos.write(xyz);                                                     // Writes the data xyz to the file abc.
+        fos.close();                                                        // Closes the file abc.
     }
 
 // jButton3 is " Connect to Server "  : Used to send back the final data from the client to the sever.
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+
         try {
+            // TODO add your handling code here:
+            ServerSocket ss = new ServerSocket(6666);
+            System.out.println("");
+            System.out.println("Started" + ss);
+            
+            
+                    Login gui = new Login(this);
+                    gui.setVisible(true);
+            //dispose();
+               
+            /*
+            while (true) {
+                Socket local = ss.accept();
 
-            System.out.println(ip);                                                 // Printing the ip address on the console
+                DataInputStream localin = new DataInputStream(local.getInputStream());
 
-            Socket s = new Socket(ip, 2194);                                        // Opening a connection with the server.
+                int len = localin.readInt();
+                byte[] auth = new byte[len];
+                if (len > 0) {
+                    localin.readFully(auth, 0, len);
+                }
 
-            read_file("AESKey.txt");                                                // Reads the contents of "AESKey.txt".
+                String authstr = new String(auth);
+                if (authstr.equals("accept")) {
+                    break;
+                }
+                else{
+                    System.out.println("ABCD");
+                }
 
-            wr_2_server(s);                                                         // Writes the contents of "AESKey.txt" to the server.
-
-            System.out.println("Done");                                             // Writes "Done" on console.
-
-            read_file("output.txt");                                                // Reads the contents of "output.txt".
-
-            wr_2_server(s);                                                         // Writes the contents of "output.txt" to the server.
-
+            }
+            
+            ss.close();
+            
+            
+            */
         } catch (IOException ex) {
             Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -319,7 +439,6 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         /*
         To display the list of all connected ports in the drop down menu 
          */
-        
         int i = 0;
         String[] r = new String[5];
 
@@ -351,31 +470,23 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
             desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");             // Initialises the Cipher type object for AES type encryption/decryption with PKCS5Padding.
 
             byte[] ansen = ans.getBytes("UTF8");                                // Converts the string ans into bytes and stores it in ansen.
-           
+
             desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);                      // Initialises desCipher in Encryption mode.
             byte[] textEncrypted = desCipher.doFinal(ansen);                    // Encrypts the data present in ansen and stores it in a variable called textEncrypted.
-            
+
             update_file(textEncrypted, "output.txt");                           // Write the data from textEncrypted to the file "output.txt".
 
             FileInputStream fis = new FileInputStream(new File("output.txt"));        // Opens the file "output.txt" in read mode.
-            String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);     // Generates a MD5 checksum for the contents of the file.
+            md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);     // Generates a MD5 checksum for the contents of the file.
             fis.close();                                                        // Closes the file "output.txt".
-            b = md5.getBytes("UTF-8");                                          // Converts the MD5 checksum into a byte array and stores it in the buffer.
-            
-            Socket s = new Socket(ip, 2194);                                    // Opens a connection with the server.
-            
 
-            wr_2_server(s);                                                     // Writes the data of buffer to the server.
-
-            s.close();                                                          // Closes the connection with the server.
-
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");         // Creates a Cipher type object and initialises it for RSA type encryption/decryption with PKCS1Padding.
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");         // Creates a Cipher type object and initialises it for RSA type encryption/decryption with PKCS5Padding.
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);                        // Initialises Cipher in Encryption mode.    
 
             byte[] key = myDesKey.getEncoded();                                 // Converts the key into a byte array.
             byte[] cipherText = cipher.doFinal(key);                            // Enrypts the data in key and stores it in cipherText.
-            
-            update_file(cipherText,"AESKey.txt");                               // Writes the data in cipherText to "AESKey.txt"
+
+            update_file(cipherText, "AESKey.txt");                               // Writes the data in cipherText to "AESKey.txt"
 
         } catch (Exception e) {
             System.out.println("Exception" + e.toString());
@@ -391,12 +502,19 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         SimpleRead(com);                                                        // calls a function which sets the configuration for the COM port and even connects to the mentioned COM Port
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
- /*
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        ans = "";
+        System.out.println("Restarted");
+        jLabel5.setText("All Data Cleared");
+
+
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    /*
     Reads the encrypted AES Key byte stream from "AESKey.txt" and decrypts the same using the Private Key
     Then it recreates the AES Key from the decrypted byte stream. 
     Utilises the recreated key to decrypt the data stored in "output.txt" and stores the decrypted data in "decp.txt"
      */
- 
  /*
      * @param args the command line arguments
      */
@@ -432,15 +550,13 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
         });
     }
 
-    
-      /*
+    /*
 * Function Name: SimpleRead(String com)
 * Input: Name of COM Port.
 * Output: none 
 * Description: Sets the Parameters of communication with X-BEE and starts a thread to read the incomind data.
 * Example Call: SimpleRead(com);
      */
-    
     public void SimpleRead(String com) {
         portList = CommPortIdentifier.getPortIdentifiers();
 
@@ -467,7 +583,7 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
                     }
                     serialPort.notifyOnDataAvailable(true);
                     try {
-                        serialPort.setSerialPortParams(9600,SerialPort.DATABITS_8,SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);   // Sets the parameters for communication with the COM port.
+                        serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);   // Sets the parameters for communication with the COM port.
                     } catch (UnsupportedCommOperationException e) {
                         System.out.println(e);
                     }
@@ -491,17 +607,18 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
 
             try {
                 if (inputStream.available() > 0) {
-                   
+
                     inputStream.read(readBuffer);                               // Reads the dara from COM port
                     String y = new String(readBuffer);                          // Converts the data to string.
                     System.out.print(new String(readBuffer));                   // Displays it on the console.
-                    
+                    jLabel5.setText("");                                        // Clear the Display to the user.
+
                     ans = ans.concat(y);                                        // Keeps on adding the data at the end of the variable ans.
                     count++;                                                    // Increases the value of count.
                     if (count == 48) {                                          // As we are sending 12 values each time so we need 48 bytes per half second. To add a new line character at the end of our variable ans.
                         count = 0;                                              // Reset the conter.
                         ans = ans + "\r\n";                                     // Adds a new line character to ans.
-                       
+
                     }
 
                 }
@@ -517,10 +634,13 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     // End of variables declaration//GEN-END:variables
 
     @Override
