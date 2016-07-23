@@ -1,9 +1,6 @@
 /*
  * start_collect.h
  *
- *  Created on: 04-Feb-2016
- *      Author: saurav
- *
  *      Description: This header file declare all required header files.
  *      Usage:  #include "commonheader.h" in any C file will inlcude all header file declared here in that source file.
  */
