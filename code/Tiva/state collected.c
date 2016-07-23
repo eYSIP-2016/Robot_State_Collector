@@ -14,7 +14,7 @@ Now only start_collection(); now needs to be added to collect the data.
 #include "xbee.c"
 #include "buzzer.c"
 #include "driverlib\lcd1.h"
-#include "collect.c"
+
 
 
 
