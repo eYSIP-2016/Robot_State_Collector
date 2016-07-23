@@ -207,7 +207,7 @@ int main()
 	init_devices();
 	lcd_set_4bit();
 	lcd_init();
-	_init_devices();/**************initialization required for state collection just before while loop***********/
+	_start_collection();/**************initialization required for state collection just before while loop***********/
 	
 	while(1)
 	{

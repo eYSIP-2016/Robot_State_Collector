@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.5.24)  22 JUL 2016 23:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.5.24)  23 JUL 2016 11:37
 entering extended mode
 **"C:/Users/Amanpreet Singh/Documents/e Yantra/Robot State Collector/Robot_Stat
 e_Collector/Documentation/report_eYSIP/Robot_State_Collector.tex"
@@ -1622,9 +1622,9 @@ File: logo.png Graphic file (type png)
 Package pdftex.def Info: logo.png used on input line 618.
 (pdftex.def)             Requested size: 28.45274pt x 30.30254pt.
  [25]
-Overfull \hbox (3.46007pt too wide) in paragraph at lines 627--628
+Overfull \hbox (22.06404pt too wide) in paragraph at lines 627--628
 []\OT1/cmr/m/n/12 In main af-ter ini-tial-is-ing all the de-vices call the func
--tion "[]init[]devices()" 
+-tion "[]start[]collection()" 
  []
 
 File: logo.png Graphic file (type png)
@@ -1719,7 +1719,7 @@ ograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Amanpreet
  Singh/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.
 pfb><C:/Users/Amanpreet Singh/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pub
 lic/amsfonts/cm/cmtt12.pfb>
-Output written on Robot_State_Collector.pdf (32 pages, 3532696 bytes).
+Output written on Robot_State_Collector.pdf (32 pages, 3533383 bytes).
 PDF statistics:
  595 PDF objects out of 1000 (max. 8388607)
  183 named destinations out of 1000 (max. 500000)

@@ -1,38 +1,38 @@
 
 /*
 *Project name:          Robot State Collector
-*Description:           This program is about to collect the state(like different sensor values etc.)of firebird V robot 
-                        repeatedly after 0.5 sec using timer4 interrupt.
+*Description:           This program is about to collect the state(like different sensor values etc.)of Fire Bird V robot 
+                        repeatedly after every 0.5 sec using timer4 interrupt and sending the values using XBee.
 *Author's name:         Amanpreet Singh,Amit Raushan 
 *Mentor's name:         Shubham Gupta
 *Filename:              state_collect.h
 *Functions:             _adc_pinconfig (),_adc_init(),_conv_adc(unsigned char),converttomm_41sk(unsigned int)._timer4_init(),
-                        send ( int),ISR(TIMER4_OVF_vect),_uart0_init(),_port_init(),_init_devices()
+                        send ( int),ISR(TIMER4_OVF_vect),_uart0_init(),_port_init(),_start_collection()
 
-*Global variables:       count,sp1,sp2,sp3,sp4,lwl,cwl,rwl,IR1,IR2,IR3,IR4
+*Global variables:       count,sp1,sp2,sp3,sp4,sp5,lwl,cwl,rwl,IR1,IR2,IR3,IR4,IR5
  ************************************************************************************/   
 /*********************************************************************************      
 ADC pin Connections used for state collection of different sensors:
 ADC CH. 	PORT	Sensor
-1			PF1		White line sensor 3
-2			PF2		White line sensor 2
-3			PF3		White line sensor 1
-4			PF4		IR Proximity analog sensor 1
-5			PF5		IR Proximity analog sensor 2
-6			PF6		IR Proximity analog sensor 3
-7			PF7		IR Proximity analog sensor 4
-8			PK0		IR Proximity analog sensor 5
-9			PK1		Sharp IR range sensor 1
-10		    PK2		Sharp IR range sensor 2
-11		    PK3		Sharp IR range sensor 3
-12		    PK4		Sharp IR range sensor 4
-13		    PK5		Sharp IR range sensor 5
+1		PF1	White line sensor 3
+2		PF2	White line sensor 2
+3		PF3	White line sensor 1
+4		PF4	IR Proximity analog sensor 1
+5		PF5	IR Proximity analog sensor 2
+6		PF6	IR Proximity analog sensor 3
+7		PF7	IR Proximity analog sensor 4
+8		PK0	IR Proximity analog sensor 5
+9		PK1	Sharp IR range sensor 1
+10		PK2	Sharp IR range sensor 2
+11		PK3	Sharp IR range sensor 3
+12		PK4	Sharp IR range sensor 4
+13		PK5	Sharp IR range sensor 5
 
 
  State collection sequence:
  **************************************************************************************
- * COUNT VALUE  LEFT WL SENSOR  CENTER WL SENSOR  RIGHT WL SENSOR	 SP1  SP2  SP3  SP4
- IR1  IR2  IR3  IR4
+ * COUNT VALUE  LEFT WL SENSOR  CENTER WL SENSOR  RIGHT WL SENSOR	 SP1  SP2  SP3  SP4 SP5
+ IR1  IR2  IR3  IR4  IR5
  
  
  note: SP->Sharp IR sensor
@@ -41,7 +41,7 @@ ADC CH. 	PORT	Sensor
   Note:
   
   1. Don't forget to include "state_collect.h" in User's program and also it is necessary to write the function
-  "_init_devices()" in user's main program and this function should be called at last position before infinite 'while loop'. 
+  "_start_collection()" in user's main program and this function should be called at last position before infinite 'while loop'. 
 
 
   2.Here, distance calculation (calculated in converttomm_41sk() function)is for Sharp GP2D12 (10cm-80cm) IR Range sensor.
@@ -62,11 +62,11 @@ ADC CH. 	PORT	Sensor
 
 char a[3];          //array having size 3
 int count = 0;
-unsigned char sp1,sp2,sp3,sp4;    //variables which contains sharp sensor values
+unsigned char sp1,sp2,sp3,sp4,sp5;    //variables which contains sharp sensor values
 unsigned char lwl = 0;           //left white line sensor 
 unsigned char cwl = 0;           //center white line sensor 
 unsigned char rwl = 0;           //right white line sensor 
-unsigned char IR1,IR2,IR3,IR4 = 0;//proximity sensors 
+unsigned char IR1,IR2,IR3,IR4,IR5 = 0;//proximity sensors 
 
 
 /*
@@ -230,10 +230,13 @@ void getdigital(void)
 	 sp2 = _conv_adc(10);    //Getting data of sharp sensor2.
 	 sp3 = _conv_adc(11);    //Getting data of sharp sensor3.
 	 sp4 = _conv_adc(12);    //Getting data of sharp sensor4.
+     sp5 = _conv_adc(13);    //Getting data of sharp sensor5.
 	 IR1 = _conv_adc(4);     //Getting value of IR proximity sensor1.
 	 IR2 = _conv_adc(5);     //Getting value of IR proximity sensor2.
 	 IR3 = _conv_adc(6);     //Getting value of IR proximity sensor3.
 	 IR4 = _conv_adc(7);     //Getting value of IR proximity sensor4.
+     IR5 = _conv_adc(8);     //Getting value of IR proximity sensor5.
+
 	 
 	
 }
@@ -259,12 +262,12 @@ ISR(TIMER4_OVF_vect)
 		send(converttomm_41sk(sp2));//send the value of sharp sensor 2
 		send(converttomm_41sk(sp3));//send the value of sharp sensor 3 
 		send(converttomm_41sk(sp4));//send the value of sharp sensor 4
+        send(converttomm_41sk(sp5));//send the value of sharp sensor 5
 		send(IR1);                  //send the value of proximity sensor1
 		send(IR2);                  //send the value of proximity sensor2
         send(IR3);                  //send the value of proximity sensor3
 		send(IR4);                  //send the value of proximity sensor4
-
-		
+        send(IR5);                  //send the value of proximity sensor5
 		count++;                      //increase the value of count
 		sei();                        //enables the global interrupt      
 }
@@ -272,7 +275,7 @@ ISR(TIMER4_OVF_vect)
 * Function Name:                   _uart0_init
 * Input:			               NONE
 * Output:                          Initialize UART0 for wireless serial communication
-* Example Call:		               NONE
+* Example Call:		               _uart0_init();
 */
 
 void _uart0_init(void)
@@ -301,13 +304,13 @@ void _port_init()
 }	
 	
 /*
-	* Function Name:     _init_devices
+	* Function Name:     _start_collection
 	* Input:			 NONE
 	* Output:            calls different function to initialize the state collection program.
 	* Logic :            NONE
-	* Example Call:		 velocity_leftwheel_cmpersec();
+	* Example Call:		 _start_collection();
 	*/
-void _init_devices()
+void _start_collection()
 {
 	cli();         //Clears the global interrupt
 	_port_init();  //Initializes all the ports

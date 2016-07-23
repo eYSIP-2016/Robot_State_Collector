@@ -1980,7 +1980,7 @@ int main(void)
 	servo_config();
 	ADC_config();
 	init_devices();
-	_init_devices();//for state collection
+	_start_collection();//for state collection
 	color_sensor_scaling();
 	navigate();			//navigate the bot at starting
 	servo1_mov(80);		//move arm to its initial position
@@ -1993,7 +1993,7 @@ int main(void)
 	enqueue(6);
 	enqueue(0);
 	enqueue(6);
-	_init_devices();/********************initialization of state collection program***************/
+	_start_collection();/********************initialization of state collection program***************/
 	while(1)				// Bot is instructed to follow line continuously 
 	{
 		line_following();
