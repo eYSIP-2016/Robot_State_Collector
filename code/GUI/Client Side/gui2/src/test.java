@@ -615,7 +615,7 @@ public class test extends javax.swing.JFrame implements Runnable, SerialPortEven
 
                     ans = ans.concat(y);                                        // Keeps on adding the data at the end of the variable ans.
                     count++;                                                    // Increases the value of count.
-                    if (count == 48) {                                          // As we are sending 12 values each time so we need 48 bytes per half second. To add a new line character at the end of our variable ans.
+                    if (count == 56) {                                          // As we are sending 12 values each time so we need 48 bytes per half second. To add a new line character at the end of our variable ans.
                         count = 0;                                              // Reset the conter.
                         ans = ans + "\r\n";                                     // Adds a new line character to ans.
 

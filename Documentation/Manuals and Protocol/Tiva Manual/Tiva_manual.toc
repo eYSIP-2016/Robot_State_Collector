@@ -2,12 +2,12 @@
 \contentsline {chapter}{\numberline {1}Tiva Manual}{2}{chapter.1}
 \contentsline {section}{\numberline {1.1}Abstract}{2}{section.1.1}
 \contentsline {section}{\numberline {1.2}Board Overview}{3}{section.1.2}
-\contentsline {subsection}{\numberline {1.2.1}Kit Contents [Source: Tiva™ C Series TM4C123G LaunchPad User's Guide]}{4}{subsection.1.2.1}
-\contentsline {subsection}{\numberline {1.2.2}Features [Source: Source: Tiva™ C Series TM4C123G LaunchPad User's Guide]}{4}{subsection.1.2.2}
+\contentsline {subsection}{\numberline {1.2.1}Kit Contents [Source: Tivaï¿½ C Series TM4C123G LaunchPad User's Guide]}{4}{subsection.1.2.1}
+\contentsline {subsection}{\numberline {1.2.2}Features [Source: Source: Tivaï¿½ C Series TM4C123G LaunchPad User's Guide]}{4}{subsection.1.2.2}
 \contentsline {section}{\numberline {1.3}Hardware Parts Used}{5}{section.1.3}
 \contentsline {section}{\numberline {1.4}Interfacing of Hardwares }{12}{section.1.4}
 \contentsline {subsection}{\numberline {1.4.1}Tiva Robot}{12}{subsection.1.4.1}
 \contentsline {section}{\numberline {1.5}Block Diagram}{17}{section.1.5}
 \contentsline {section}{\numberline {1.6}Voltage Regulator Circuit Diagram}{18}{section.1.6}
 \contentsline {subsection}{\numberline {1.6.1}Steps for Assembling Tiva Robot}{19}{subsection.1.6.1}
-\contentsline {section}{\numberline {1.7}Software and Code}{25}{section.1.7}
+\contentsline {section}{\numberline {1.7}Software and Code}{26}{section.1.7}

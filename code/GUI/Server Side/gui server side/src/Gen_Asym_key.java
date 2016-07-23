@@ -33,7 +33,7 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
  *
  * @author Amanpreet Singh
  */
-public class serial {
+public class Gen_Asym_key {
 
     public static X509Certificate generateCertificate(KeyPair keyPair) throws CertificateEncodingException, IllegalStateException, NoSuchProviderException, NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         X509V3CertificateGenerator cert = new X509V3CertificateGenerator();
